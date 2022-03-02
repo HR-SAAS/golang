@@ -12,6 +12,7 @@ func main() {
 	host := fmt.Sprintf(":%d", port)
 
 	initial.InitLog()
+	initial.InitConfig()
 	app := gin.Default()
 	initial.InitApiRoute(app)
 

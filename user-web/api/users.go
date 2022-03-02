@@ -5,14 +5,44 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"hr-saas-go/user-web/global"
 	"hr-saas-go/user-web/proto"
 	"net/http"
 )
 
+func MakeTrans(code int, msg string, data interface{}) gin.H {
+	return gin.H{
+		"code": code,
+		"msg":  msg,
+		"data": data,
+	}
+}
+
+func SuccessRet(msg string) {
+
+}
+
+func HandleGrpcError(err error, ctx *gin.Context) {
+	if st, ok := status.FromError(err); ok {
+		switch st.Code() {
+		case codes.NotFound:
+			ctx.JSON(http.StatusNotFound, MakeTrans(1, "找不到", nil))
+		case codes.InvalidArgument:
+			ctx.JSON(http.StatusNotFound, MakeTrans(1, "错误参数", nil))
+		case codes.Internal:
+			ctx.JSON(http.StatusNotFound, MakeTrans(1, "内部错误", nil))
+		default:
+			ctx.JSON(http.StatusNotFound, MakeTrans(1, "其他错误", nil))
+		}
+	}
+}
+
 func GetUserList(ctx *gin.Context) {
 	//proto
-	host := "127.0.0.1"
-	port := 5001
+	host := global.Config.UserSrvInfo.Host
+	port := global.Config.UserSrvInfo.Port
 	con, err := grpc.Dial(fmt.Sprintf("%s:%d", host, port), grpc.WithInsecure())
 	if err != nil {
 		zap.S().Errorf("connect user service err: %s", err.Error())
@@ -28,9 +58,7 @@ func GetUserList(ctx *gin.Context) {
 	})
 	if err != nil {
 		zap.S().Errorf("user service call err: %s", err.Error())
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"msg": "调用失败",
-		})
+		HandleGrpcError(err, ctx)
 		return
 	}
 	ctx.JSON(http.StatusOK, list)
@@ -38,4 +66,5 @@ func GetUserList(ctx *gin.Context) {
 
 func GetUser(ctx *gin.Context) {
 	//proto
+
 }
