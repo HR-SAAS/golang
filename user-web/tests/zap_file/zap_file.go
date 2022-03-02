@@ -2,15 +2,19 @@ package main
 
 import (
 	"go.uber.org/zap"
-	"testing"
 	"time"
 )
 
-func Test_Zap(t *testing.T) {
-	// json格式
-	//logger, _ := zap.NewProduction()
-	// 日志格式
-	logger, _ := zap.NewDevelopment()
+func NewLogger() (logger *zap.Logger, err error) {
+	cfg := zap.NewDevelopmentConfig()
+	cfg.OutputPaths = []string{
+		"./log.log",
+		"stderr",
+	}
+	return cfg.Build()
+}
+func main() {
+	logger, _ := NewLogger()
 	defer logger.Sync()
 	url := "www.hr-saas.com"
 	logger.Info("failed to fetch URL",
@@ -27,6 +31,5 @@ func Test_Zap(t *testing.T) {
 		"attempt", 3,
 		"backoff", time.Second,
 	)
-	zap.S().Info("hello")
 	sugar.Infof("Failed to fetch URL: %s", url)
 }
