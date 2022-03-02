@@ -6,7 +6,8 @@ import (
 )
 
 func InitApiRoute(app *gin.Engine) {
-	api := app.Group("v1")
-	router.InitUserRouter(api)
+	api := app.Group("api")
+	r := api.Group("v1")
+	router.InitUserRouter(r)
 
 }
