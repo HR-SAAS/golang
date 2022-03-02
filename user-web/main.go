@@ -1,1 +1,5 @@
-package user_web
+package main
+
+func main() {
+
+}
