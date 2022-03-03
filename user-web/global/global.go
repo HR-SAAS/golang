@@ -1,7 +1,11 @@
 package global
 
-import "hr-saas-go/user-web/config"
+import (
+	ut "github.com/go-playground/universal-translator"
+	"hr-saas-go/user-web/config"
+)
 
 var (
 	Config *config.ServerConfig = &config.ServerConfig{}
+	Trans  ut.Translator
 )

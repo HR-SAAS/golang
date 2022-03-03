@@ -8,4 +8,5 @@ type UserSrvConfig struct {
 type ServerConfig struct {
 	Name        string        `mapstructure:"name"`
 	UserSrvInfo UserSrvConfig `mapstructure:"user_srv"`
+	Local       string        `mapstructure:"local"`
 }

@@ -15,7 +15,8 @@ func main() {
 	initial.InitConfig()
 	app := gin.Default()
 	initial.InitApiRoute(app)
-
+	// 初始化表单 验证
+	initial.InitValidator()
 	zap.S().Debugf("server run in %s ", host)
 	err := app.Run(host)
 	if err != nil {
