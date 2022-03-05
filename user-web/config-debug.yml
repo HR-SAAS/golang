@@ -3,3 +3,5 @@ local: 'zh'
 user_srv:
   host: '127.0.0.1'
   port: 5001
+jwt_config:
+  key: "1213123"
