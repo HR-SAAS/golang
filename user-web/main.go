@@ -10,10 +10,9 @@ import (
 func main() {
 	port := 8082
 	host := fmt.Sprintf(":%d", port)
-
+	app := gin.Default()
 	initial.InitLog()
 	initial.InitConfig()
-	app := gin.Default()
 	initial.InitApiRoute(app)
 	// 初始化表单 验证
 	initial.InitValidator()

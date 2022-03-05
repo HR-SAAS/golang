@@ -11,5 +11,8 @@ func InitUserRouter(group *gin.RouterGroup) {
 		userGroup.GET("/", api.GetUserList)
 		userGroup.GET(":id", api.GetUser)
 	}
-
+	authGroup := group.Group("auth")
+	{
+		authGroup.POST("loginByMobile", api.LoginByMobile)
+	}
 }

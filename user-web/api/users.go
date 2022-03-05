@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc/status"
 	"hr-saas-go/user-web/global"
 	"hr-saas-go/user-web/proto"
+	"hr-saas-go/user-web/request"
 	"net/http"
 )
 
@@ -66,5 +67,19 @@ func GetUserList(ctx *gin.Context) {
 
 func GetUser(ctx *gin.Context) {
 	//proto
+	get, err := request.MobileLoginRequestGet(ctx)
+	if err != nil {
+		return
+	}
+	println(get.Password, get.Mobile)
+}
 
+func LoginByMobile(ctx *gin.Context) {
+	get, err := request.MobileLoginRequestGet(ctx)
+	if err != nil {
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"data": get,
+	})
 }

@@ -1,6 +1,29 @@
 package request
 
-type PageInfo struct {
-	Page  int `json:"page" binding:"int"`
-	Limit int `json:"limit" binding:"int"`
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
+	"hr-saas-go/user-web/global"
+	"hr-saas-go/user-web/utils"
+	"net/http"
+)
+
+type MobileLoginRequest struct {
+	Mobile   string `json:"mobile" form:"mobile" binding:"required"`
+	Password string `json:"password" form:"password" binding:"required,min=3"`
+}
+
+func MobileLoginRequestGet(c *gin.Context) (MobileLoginRequest, error) {
+	var mobileLoginRequest MobileLoginRequest
+	if err := c.ShouldBind(&mobileLoginRequest); err != nil {
+		e, ok := err.(validator.ValidationErrors)
+		if ok {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"errors": utils.RemoveTopName(e.Translate(global.Trans)),
+			})
+		}
+		//handle error
+		return mobileLoginRequest, err
+	}
+	return mobileLoginRequest, nil
 }
