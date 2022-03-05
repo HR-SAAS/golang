@@ -9,5 +9,6 @@ func InitApiRoute(app *gin.Engine) {
 	api := app.Group("api")
 	r := api.Group("v1")
 	router.InitUserRouter(r)
+	router.InitCaptcha(r)
 
 }

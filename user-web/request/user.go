@@ -10,8 +10,10 @@ import (
 )
 
 type MobileLoginRequest struct {
-	Mobile   string `json:"mobile" form:"mobile" binding:"required,mobile"`
-	Password string `json:"password" form:"password" binding:"required,min=3"`
+	Mobile    string `json:"mobile" form:"mobile" binding:"required,mobile"`
+	Password  string `json:"password" form:"password" binding:"required,min=3"`
+	Captcha   string `json:"captcha" form:"captcha" binding:"required"`
+	CaptchaId string `json:"captcha_id" form:"captcha_id" binding:"required"`
 }
 
 func ValidateMobile(fl validator.FieldLevel) bool {
