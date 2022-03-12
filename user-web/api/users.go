@@ -20,18 +20,10 @@ import (
 
 func GetUserList(ctx *gin.Context) {
 	//proto
-	host := global.Config.UserSrvInfo.Host
-	port := global.Config.UserSrvInfo.Port
-	con, err := grpc.Dial(fmt.Sprintf("%s:%d", host, port), grpc.WithInsecure())
-	if err != nil {
-		zap.S().Errorf("connect user service err: %s", err.Error())
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"msg": "调用失败",
-			"err": err.Error(),
-		})
-	}
-	usr := proto.NewUserClient(con)
-	list, err := usr.GetUserList(ctx, &proto.PageInfo{
+	//host := global.Config.UserSrvInfo.Host
+	//port := global.Config.UserSrvInfo.Port
+
+	list, err := global.UserServCon.GetUserList(ctx, &proto.PageInfo{
 		Page:  1,
 		Limit: 10,
 	})
@@ -53,7 +45,7 @@ func GetUser(ctx *gin.Context) {
 }
 
 func LoginByMobile(ctx *gin.Context) {
-	request, err := request.MobileLoginRequestGet(ctx)
+	req, err := request.MobileLoginRequestGet(ctx)
 	if err != nil {
 		return
 	}
@@ -71,19 +63,19 @@ func LoginByMobile(ctx *gin.Context) {
 	// 校验验证码
 
 	usr := proto.NewUserClient(con)
-	user, err := usr.FindUserByMobile(context.Background(), &proto.MobileRequest{Mobile: request.Mobile})
+	user, err := usr.FindUserByMobile(context.Background(), &proto.MobileRequest{Mobile: req.Mobile})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx, "手机号或密码错误")
 		return
 	}
 
-	checkResult, err := usr.CheckPassword(context.Background(), &proto.CheckPasswordRequest{Password: request.Password, Encrypt: user.Password})
+	checkResult, err := usr.CheckPassword(context.Background(), &proto.CheckPasswordRequest{Password: req.Password, Encrypt: user.Password})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)
 		return
 	}
 
-	if !base64Captcha.DefaultMemStore.Verify(request.CaptchaId, request.Captcha, true) {
+	if !base64Captcha.DefaultMemStore.Verify(req.CaptchaId, req.Captcha, true) {
 		ctx.JSON(http.StatusOK, gin.H{
 			"msg": "验证码错误",
 		})

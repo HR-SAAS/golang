@@ -20,6 +20,7 @@ func main() {
 	// 初始化表单 验证
 	initial.InitValidator()
 	initial.InitRegister()
+	initial.InitialCon()
 	// 注册自定义表单验证
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		_ = v.RegisterValidation("mobile", request.ValidateMobile)
