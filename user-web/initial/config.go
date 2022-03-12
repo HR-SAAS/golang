@@ -14,7 +14,7 @@ func InitConfig() {
 	v := viper.New()
 	v.AutomaticEnv()
 	debug := v.GetBool("DEBUG")
-	println(debug)
+
 	configPrefix := "config"
 	configPrefix = configDir + "/" + "config"
 	if debug {

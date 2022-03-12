@@ -2,12 +2,10 @@ package api
 
 import (
 	"context"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/mojocn/base64Captcha"
 	"go.uber.org/zap"
-	"google.golang.org/grpc"
 	"hr-saas-go/user-web/global"
 	"hr-saas-go/user-web/middleware"
 	"hr-saas-go/user-web/models"
@@ -49,27 +47,14 @@ func LoginByMobile(ctx *gin.Context) {
 	if err != nil {
 		return
 	}
-	//登录逻辑
-	host := global.Config.UserSrvInfo.Host
-	port := global.Config.UserSrvInfo.Port
-	con, err := grpc.Dial(fmt.Sprintf("%s:%d", host, port), grpc.WithInsecure())
-	if err != nil {
-		zap.S().Errorf("connect user service err: %s", err.Error())
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"msg": "调用失败",
-			"err": err.Error(),
-		})
-	}
-	// 校验验证码
 
-	usr := proto.NewUserClient(con)
-	user, err := usr.FindUserByMobile(context.Background(), &proto.MobileRequest{Mobile: req.Mobile})
+	user, err := global.UserServCon.FindUserByMobile(context.Background(), &proto.MobileRequest{Mobile: req.Mobile})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx, "手机号或密码错误")
 		return
 	}
 
-	checkResult, err := usr.CheckPassword(context.Background(), &proto.CheckPasswordRequest{Password: req.Password, Encrypt: user.Password})
+	checkResult, err := global.UserServCon.CheckPassword(context.Background(), &proto.CheckPasswordRequest{Password: req.Password, Encrypt: user.Password})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)
 		return
