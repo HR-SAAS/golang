@@ -24,3 +24,10 @@ func InitCaptcha(group *gin.RouterGroup) {
 		userGroup.GET("/img", api.GetCaptcha)
 	}
 }
+
+func InitHealth(group *gin.RouterGroup) {
+	userGroup := group.Group("health")
+	{
+		userGroup.GET("/", api.Health)
+	}
+}
