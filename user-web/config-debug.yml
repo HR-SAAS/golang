@@ -1,6 +1,6 @@
 name: 'user-web'
 local: 'zh'
-host: '192.168.49.119'
+host: '192.168.205.119'
 port: 9003
 user_srv:
   host: '127.0.0.1'
