@@ -8,6 +8,7 @@ import (
 
 var (
 	Config      *config.ServerConfig = &config.ServerConfig{}
+	NacosConfig *config.NacosConfig  = &config.NacosConfig{}
 	Trans       ut.Translator
 	UserServCon proto.UserClient
 )
