@@ -1,0 +1,5 @@
+host: 'localhost'
+port: 8848
+namespace: '92eb12b0-1a27-41ec-a6f8-4a8bb1611e56'
+data-id: 'company-web.json'
+group: 'dev'
