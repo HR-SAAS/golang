@@ -12,6 +12,7 @@ require (
 	github.com/mojocn/base64Captcha v1.3.5
 	github.com/nacos-group/nacos-sdk-go v1.1.1
 	github.com/pkg/errors v0.9.1
+	github.com/satori/go.uuid v1.2.0
 	github.com/spf13/viper v1.10.1
 	go.uber.org/zap v1.21.0
 	google.golang.org/grpc v1.44.0

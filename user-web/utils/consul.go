@@ -3,13 +3,16 @@ package utils
 import (
 	"fmt"
 	"github.com/hashicorp/consul/api"
-	"hr-saas-go/user-web/global"
 )
 
-func getClient() *api.Client {
-	config := global.Config.ConsulConfig
+type ConsulRegister struct {
+	host string
+	port int
+}
+
+func getClient(host string, port int) *api.Client {
 	cfg := api.DefaultConfig()
-	cfg.Address = fmt.Sprintf("%s:%d", config.Host, config.Port)
+	cfg.Address = fmt.Sprintf("%s:%d", host, port)
 	client, err := api.NewClient(cfg)
 	if err != nil {
 		panic(err)
@@ -17,10 +20,15 @@ func getClient() *api.Client {
 	return client
 }
 
-func Register(name string, id string, address string, port int, tags []string) error {
+func NewRegister(host string, port int) Register {
+	return &ConsulRegister{
+		host: host,
+		port: port,
+	}
+}
 
-	client := getClient()
-
+func (c *ConsulRegister) Register(name string, id string, address string, port int, tags []string) error {
+	client := getClient(c.host, c.port)
 	register := api.AgentServiceRegistration{
 		ID:      id,
 		Name:    name,
@@ -43,11 +51,18 @@ func Register(name string, id string, address string, port int, tags []string) e
 	return nil
 }
 
-func FilterService(filter string) map[string]*api.AgentService {
-	client := getClient()
+func (c *ConsulRegister) FilterService(filter string) map[string]*api.AgentService {
+	client := getClient(c.host, c.port)
 	withFilter, err := client.Agent().ServicesWithFilter(filter)
 	if err != nil {
 		return nil
 	}
 	return withFilter
+}
+
+func (c *ConsulRegister) Deregister(id string) error {
+	client := getClient(c.host, c.port)
+	err := client.Agent().ServiceDeregister(id)
+
+	return err
 }

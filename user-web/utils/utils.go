@@ -2,12 +2,19 @@ package utils
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/hashicorp/consul/api"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"net/http"
 	"strings"
 )
+
+type Register interface {
+	Register(name string, id string, address string, port int, tags []string) error
+	FilterService(filter string) map[string]*api.AgentService
+	Deregister(id string) error
+}
 
 func RemoveTopName(fieldErr map[string]string) map[string]string {
 	res := map[string]string{}
