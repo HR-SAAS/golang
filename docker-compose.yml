@@ -1,0 +1,20 @@
+version: '3'
+
+networks:
+  go:
+    driver: bridge
+
+services:
+  user-web:
+    build:
+      context: ./user-web
+    environment:
+      DEBUG: true
+      GIN_MODE: release
+
+  company-web:
+    build:
+      context: ./company-web
+    environment:
+      DEBUG: true
+      GIN_MODE: release

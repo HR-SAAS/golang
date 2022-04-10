@@ -10,6 +10,6 @@ var (
 	Config            *config.ServerConfig = &config.ServerConfig{}
 	NacosConfig       *config.NacosConfig  = &config.NacosConfig{}
 	Trans             ut.Translator
-	CompanyServCon    proto.CompanyServer
-	DepartmentServCon proto.DepartmentServer
+	CompanyServCon    proto.CompanyClient
+	DepartmentServCon proto.DepartmentClient
 )

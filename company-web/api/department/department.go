@@ -1,7 +1,6 @@
-package company
+package department
 
 import (
-	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"hr-saas-go/company-web/global"
@@ -13,9 +12,19 @@ import (
 )
 
 func List(ctx *gin.Context) {
-	list, err := global.CompanyServCon.GetCompanyList(ctx, &proto.GetCompanyListRequest{
-		Page:  1,
-		Limit: 10,
+	companyIdStr := ctx.Query("company_id")
+	pageStr := ctx.DefaultQuery("page", "1")
+	limitStr := ctx.DefaultQuery("limit", "10")
+	companyId, _ := strconv.Atoi(companyIdStr)
+	page, _ := strconv.Atoi(pageStr)
+	limit, _ := strconv.Atoi(limitStr)
+
+	var list, err = global.DepartmentServCon.GetDepartmentList(ctx, &proto.GetDepartmentListRequest{
+		Page:      int32(page),
+		Limit:     int32(limit),
+		CompanyId: int64(companyId),
+		Search:    "",
+		Order:     "",
 	})
 	if err != nil {
 		zap.S().Errorf("company service call err: %s", err.Error())
@@ -29,7 +38,7 @@ func Show(ctx *gin.Context) {
 	// 是否展示创建者
 	id := ctx.Param("id")
 	if idInt, err := strconv.Atoi(id); err == nil {
-		data, err := global.CompanyServCon.GetCompanyDetail(ctx, &proto.GetCompanyDetailRequest{
+		data, err := global.DepartmentServCon.GetDepartmentDetail(ctx, &proto.GetDepartmentDetailRequest{
 			Id: int64(idInt),
 		})
 		if err != nil {
@@ -45,7 +54,7 @@ func Show(ctx *gin.Context) {
 }
 
 func Create(ctx *gin.Context) {
-	req, err := request.CompanySaveRequestGet(ctx)
+	req, err := request.DepartmentSaveRequestGet(ctx)
 	if err != nil {
 		return
 	}
@@ -54,33 +63,27 @@ func Create(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, utils.ErrorJson("系统错误"))
 		return
 	}
-	Tags := ""
-	if req.Tags != nil {
-		tags, _ := json.Marshal(req.Tags)
-		Tags = string(tags)
-	}
-	res, err := global.CompanyServCon.CreateCompany(ctx, &proto.CreateCompanyRequest{
+	res, err := global.DepartmentServCon.CreateDepartment(ctx, &proto.CreateDepartmentRequest{
+		CompanyId: req.CompanyId,
+		ParentId:  req.ParentId,
+		Icon:      req.Icon,
 		Name:      req.Name,
+		Remark:    req.Remark,
 		Desc:      req.Desc,
-		Website:   req.Website,
-		Config:    req.Config,
-		Tags:      Tags,
-		Address:   req.Address,
 		Info:      req.Info,
 		CreatorId: userId.(int64),
-		ParentId:  req.ParentId,
 		Status:    1,
 	})
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("系统错误"))
 		return
 	}
-	ctx.JSON(http.StatusOK, utils.SuccessJson(res))
+	ctx.JSON(http.StatusInternalServerError, utils.SuccessJson(res))
 	return
 }
 
 func Update(ctx *gin.Context) {
-	req, err := request.CompanySaveRequestGet(ctx)
+	req, err := request.DepartmentSaveRequestGet(ctx)
 	if err != nil {
 		return
 	}
@@ -89,17 +92,18 @@ func Update(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("系统错误"))
 		return
 	}
-	_, err = global.CompanyServCon.UpdateCompany(ctx, &proto.UpdateCompanyRequest{
-		Name:    req.Name,
-		Desc:    req.Desc,
-		Website: req.Website,
-		Config:  req.Config,
-		//Tags:      req.Tags,
-		Address:   req.Address,
+	id, _ := ctx.Get("id")
+	_, err = global.DepartmentServCon.UpdateDepartment(ctx, &proto.UpdateDepartmentRequest{
+		Id:        id.(int64),
+		CompanyId: req.CompanyId,
+		ParentId:  req.ParentId,
+		Icon:      req.Icon,
+		Name:      req.Name,
+		Remark:    req.Remark,
+		Desc:      req.Desc,
 		Info:      req.Info,
 		CreatorId: userId.(int64),
-		ParentId:  req.ParentId,
-		Status:    1,
+		Status:    req.Status,
 	})
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("系统错误"))
@@ -113,7 +117,7 @@ func Delete(ctx *gin.Context) {
 	// 是否展示创建者
 	id := ctx.Param("id")
 	if idInt, err := strconv.Atoi(id); err == nil {
-		data, err := global.CompanyServCon.DeleteCompany(ctx, &proto.DeleteCompanyRequest{
+		data, err := global.DepartmentServCon.DeleteDepartment(ctx, &proto.DeleteDepartmentRequest{
 			Id: int64(idInt),
 		})
 		if err != nil {
@@ -122,20 +126,20 @@ func Delete(ctx *gin.Context) {
 			return
 		}
 		ctx.JSON(http.StatusOK, utils.SuccessJson(data))
-
 		return
 	}
 	ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("id不正确"))
 	return
 }
 
-func MyCompany(ctx *gin.Context) {
+// MyDepartment 我加入的
+func MyDepartment(ctx *gin.Context) {
 	userId, ok := ctx.Get("userId")
 	if !ok {
 		ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("系统错误"))
 		return
 	}
-	res, err := global.CompanyServCon.GetMyCompanyList(ctx, &proto.GetMyCompanyListRequest{
+	res, err := global.DepartmentServCon.GetMyDepartmentList(ctx, &proto.GetMyDepartmentListRequest{
 		UserId: userId.(int64),
 	})
 	if err != nil {

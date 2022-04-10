@@ -7,6 +7,7 @@ import (
 	"hr-saas-go/user-web/global"
 	"hr-saas-go/user-web/models"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -21,6 +22,7 @@ func JWTAuth() gin.HandlerFunc {
 			return
 		}
 		j := NewJWT()
+		token = strings.Split(token, " ")[1]
 		claims, err := j.ParseToken(token)
 		if err != nil {
 			if err == TokenExpired {

@@ -15,6 +15,12 @@ type ConsulConfig struct {
 	Port int    `mapstructure:"port" json:"port"`
 }
 
+type RedisConfig struct {
+	Host     string `mapstructure:"host" json:"host"`
+	Port     int    `mapstructure:"port" json:"port"`
+	Password string `mapstructure:"password" json:"password"`
+}
+
 type ServerConfig struct {
 	Host         string        `mapstructure:"host" json:"host"`
 	Port         int           `mapstructure:"port" json:"port"`
@@ -23,6 +29,7 @@ type ServerConfig struct {
 	Local        string        `mapstructure:"local" json:"local"`
 	JwtConfig    JwtConfig     `mapstructure:"jwt_config" json:"jwt_config"`
 	ConsulConfig ConsulConfig  `mapstructure:"consul" json:"consul"`
+	RedisConfig  RedisConfig   `mapstructure:"redis" json:"redis"`
 }
 
 type NacosConfig struct {

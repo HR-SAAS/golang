@@ -27,6 +27,8 @@ func main() {
 	// 自动生成id
 	u2 := uuid.NewV4()
 	id := fmt.Sprintf("%v", u2)
+
+	// 获取端口和ip地址
 	err := register.Register(config.Name, id, config.Host, config.Port, []string{
 		"company-web", "golang", "web",
 	})

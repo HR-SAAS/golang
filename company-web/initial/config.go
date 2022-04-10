@@ -72,7 +72,7 @@ func InitConfig() {
 		},
 	}
 	cc := constant.ClientConfig{
-		NamespaceId:         "92eb12b0-1a27-41ec-a6f8-4a8bb1611e56", //namespace id
+		NamespaceId:         global.NacosConfig.Namespace, //namespace id
 		TimeoutMs:           5000,
 		NotLoadCacheAtStart: true,
 		LogDir:              "tmp/nacos/log",
@@ -92,8 +92,8 @@ func InitConfig() {
 	}
 
 	content, err := client.GetConfig(vo.ConfigParam{
-		DataId: "company-web.json",
-		Group:  "dev",
+		DataId: global.NacosConfig.DataId,
+		Group:  global.NacosConfig.Group,
 	})
 	fmt.Println("GetConfig,config :" + content)
 

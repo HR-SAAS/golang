@@ -22,6 +22,26 @@ func ValidateMobile(fl validator.FieldLevel) bool {
 	return ok
 }
 
+type MobileRequest struct {
+	Mobile string `json:"mobile" form:"mobile" binding:"required,mobile"`
+	Type   string `json:"type" form:"type" binding:"required,mobile"`
+}
+
+func MobileSmsLoginRequestGet(c *gin.Context) (MobileRequest, error) {
+	var mobileRequest MobileRequest
+	if err := c.ShouldBind(&mobileRequest); err != nil {
+		e, ok := err.(validator.ValidationErrors)
+		if ok {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"errors": utils.RemoveTopName(e.Translate(global.Trans)),
+			})
+		}
+		//handle error
+		return mobileRequest, err
+	}
+	return mobileRequest, nil
+}
+
 func MobileLoginRequestGet(c *gin.Context) (MobileLoginRequest, error) {
 	var mobileLoginRequest MobileLoginRequest
 	if err := c.ShouldBind(&mobileLoginRequest); err != nil {

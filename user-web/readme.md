@@ -1,4 +1,4 @@
 
-> protoc -I . .\user.proto --go_out=plugins=grpc:.
+> protoc --go_out=plugins=grpc:.  -I . .\user.proto
 > 
 > //== 就不会有client

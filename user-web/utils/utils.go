@@ -24,6 +24,15 @@ func RemoveTopName(fieldErr map[string]string) map[string]string {
 	return res
 }
 
+func SuccessJson(data interface{}) gin.H {
+	return MakeTrans(0, "success", data)
+}
+
+func ErrorJson(msg string) gin.H {
+	return MakeTrans(1, msg, nil)
+
+}
+
 func MakeTrans(code int, msg string, data interface{}) gin.H {
 	return gin.H{
 		"code": code,
