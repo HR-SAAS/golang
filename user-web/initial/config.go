@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"hr-saas-go/user-web/global"
+	"hr-saas-go/user-web/utils"
 )
 
 var configDir = "."
@@ -99,4 +100,20 @@ func InitConfig() {
 
 	// json
 	err = json.Unmarshal([]byte(content), &global.Config)
+
+	if global.Config.Port != 0 {
+		port, err := utils.GetFreePort()
+		if err != nil {
+			panic(err)
+		}
+		global.Config.Port = port
+	}
+
+	if global.Config.Host != "" {
+		addr, err := utils.GetCurrentHost()
+		if err != nil {
+			panic(err)
+		}
+		global.Config.Host = addr
+	}
 }

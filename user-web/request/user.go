@@ -24,7 +24,7 @@ func ValidateMobile(fl validator.FieldLevel) bool {
 
 type MobileRequest struct {
 	Mobile string `json:"mobile" form:"mobile" binding:"required,mobile"`
-	Type   string `json:"type" form:"type" binding:"required,mobile"`
+	Type   string `json:"type" form:"type" binding:"required,oneof=register login'"`
 }
 
 func MobileSmsLoginRequestGet(c *gin.Context) (MobileRequest, error) {

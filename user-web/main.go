@@ -17,6 +17,10 @@ import (
 	"syscall"
 )
 
+func generatePort() {
+
+}
+
 func main() {
 	app := gin.Default()
 	initial.InitLog()
@@ -31,6 +35,8 @@ func main() {
 	// 自动生成id
 	u2 := uuid.NewV4()
 	id := fmt.Sprintf("%v", u2)
+
+	// 自动生成host&port
 	err := register.Register(config.Name, id, config.Host, config.Port, []string{
 		"user-web", "golang", "web",
 	})

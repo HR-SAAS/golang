@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"go.uber.org/zap"
+	"hr-saas-go/user-web/utils"
 	"testing"
 	"time"
 )
@@ -40,6 +41,7 @@ func (j JsonTime) MarshalJSON() ([]byte, error) {
 	return []byte(stmp), nil
 }
 func Test_func(t *testing.T) {
+	print(utils.GetCurrentHost())
 	s := struct {
 		T JsonTime `json:"t"`
 	}{
