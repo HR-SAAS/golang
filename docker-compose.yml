@@ -24,6 +24,8 @@ services:
       NACOS_NAMESPACE: "${USER_NACOS_NAMESPACE}"
     volumes:
       - ./user-web/config-debug.yml:/app/config-debug.yml
+    networks:
+      - go
   company-web:
     build:
       context: ./company-web
@@ -37,3 +39,5 @@ services:
       NACOS_DATA_ID: "${COMPANY_NACOS_DATA_ID}"
       NACOS_GROUP: "${COMPANY_NACOS_GROUP}"
       NACOS_NAMESPACE: "${COMPANY_NACOS_NAMESPACE}"
+    networks:
+      - go
