@@ -10,11 +10,14 @@ func InitUserRouter(group *gin.RouterGroup) {
 	userGroup := group.Group("users").Use(middleware.JWTAuth())
 	{
 		userGroup.GET("/", api.GetUserList)
-		userGroup.GET(":id", api.GetUser)
+		userGroup.GET("info", api.GetInfo)
+		userGroup.GET(":id", api.Show)
 	}
 	authGroup := group.Group("auth")
 	{
-		authGroup.POST("loginByMobile", api.LoginByMobile)
+		authGroup.POST("loginByPassword", api.LoginByPassword)
+		authGroup.POST("loginByCode", api.LoginByCode)
+		authGroup.POST("register", api.Register)
 	}
 }
 
@@ -22,6 +25,7 @@ func InitCaptcha(group *gin.RouterGroup) {
 	userGroup := group.Group("captcha")
 	{
 		userGroup.GET("/img", api.GetCaptcha)
+		userGroup.POST("/sms", api.GetSmsCaptcha)
 	}
 }
 

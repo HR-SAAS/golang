@@ -28,8 +28,11 @@ func SuccessJson(data interface{}) gin.H {
 	return MakeTrans(0, "success", data)
 }
 
-func ErrorJson(msg string) gin.H {
-	return MakeTrans(1, msg, nil)
+func ErrorJson(msg string, data ...interface{}) gin.H {
+	if len(data) == 1 {
+		return MakeTrans(1, msg, data[0])
+	}
+	return MakeTrans(1, msg, data)
 
 }
 

@@ -1,10 +1,12 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/dysmsapi"
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
+	"hr-saas-go/user-web/global"
 	"hr-saas-go/user-web/request"
 	"hr-saas-go/user-web/utils"
 	"math/rand"
@@ -18,9 +20,7 @@ func GetCaptcha(ctx *gin.Context) {
 	// 返回图片验证码
 	id, b64s, err := c.Generate()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"msg": "生成验证码失败",
-		})
+		ctx.JSON(http.StatusOK, utils.ErrorJson("生成验证码失败"))
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{
@@ -38,25 +38,51 @@ func GetSmsCaptcha(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, utils.ErrorJson("手机号不正确"))
 		return
 	}
+	rdb := utils.NewRedis()
+	key := fmt.Sprintf("%s_%s", mobileRequest.Mobile, mobileRequest.Type)
 	// 获取缓存
+	// lock
+	if data := rdb.Get(context.Background(), fmt.Sprintf("%s_lock", mobileRequest.Mobile)); data.Val() != "" {
+		ctx.JSON(http.StatusOK, utils.ErrorJson("请勿重复请求"))
+		return
+	}
+	// times次数
+	if data, _ := rdb.Get(context.Background(), mobileRequest.Mobile).Int(); data > 3 {
+		ctx.JSON(http.StatusOK, utils.ErrorJson("请勿重复请求"))
+		return
+	}
+	code := 0
+	if global.Debug {
+		code = 12345
+	} else {
+		client, err := dysmsapi.NewClientWithAccessKey("cn-qingdao", "LTAI5tAAjLhEXmxpigb7BFYz", "XwpYel3yJ98sx8D0zcoRl9SUiOK2cM")
+		/* use STS Token
+		client, err := dysmsapi.NewClientWithStsToken("cn-qingdao", "<your-access-key-id>", "<your-access-key-secret>", "<your-sts-token>")
+		*/
+		sendSmsRequest := dysmsapi.CreateSendSmsRequest()
+		sendSmsRequest.Scheme = "https"
+		sendSmsRequest.PhoneNumbers = mobileRequest.Mobile //接收短信的手机号码
+		sendSmsRequest.SignName = "yblog"                  //短信签名名称
+		sendSmsRequest.TemplateCode = "SMS_148865003"      //短信模板ID
+		code := generateCode(5)
+		sendSmsRequest.TemplateParam = "{\"code\":\"" + code + "\"}"
+		_, err = client.SendSms(sendSmsRequest)
+		if err != nil {
+			ctx.JSON(http.StatusOK, utils.ErrorJson("发送失败"))
+			return
+		}
+	}
 
 	// 发送手机验证码
-	client, err := dysmsapi.NewClientWithAccessKey("cn-qingdao", "LTAI5tAAjLhEXmxpigb7BFYz", "XwpYel3yJ98sx8D0zcoRl9SUiOK2cM")
-	/* use STS Token
-	client, err := dysmsapi.NewClientWithStsToken("cn-qingdao", "<your-access-key-id>", "<your-access-key-secret>", "<your-sts-token>")
-	*/
-	request := dysmsapi.CreateSendSmsRequest()
-	request.Scheme = "https"
-	request.PhoneNumbers = mobileRequest.Mobile //接收短信的手机号码
-	request.SignName = "yblog"                  //短信签名名称
-	request.TemplateCode = "SMS_148865003"      //短信模板ID
-	// 随机验证码
-	request.TemplateParam = "{\"code\":\"" + generateCode(5) + "\"}"
-	_, err = client.SendSms(request)
-	if err != nil {
-		fmt.Print(err.Error())
-	}
+
 	// redis 存储次数和验证码内容
+
+	rdb.Set(context.Background(), key, code, time.Minute*5)
+	rdb.Set(context.Background(), fmt.Sprintf("%s_lock", mobileRequest.Mobile), code, time.Minute)
+
+	rdb.Incr(context.Background(), mobileRequest.Mobile)
+	ctx.JSON(http.StatusOK, utils.SuccessJson("发送成功"))
+	return
 }
 
 func generateCode(length int) string {

@@ -47,7 +47,7 @@ func InitConfig() {
 	v := viper.New()
 	v.AutomaticEnv()
 	debug := v.GetBool("DEBUG")
-
+	global.Debug = debug
 	configPrefix := "config"
 	configPrefix = configDir + "/" + "config"
 	if debug {
@@ -101,7 +101,7 @@ func InitConfig() {
 	// json
 	err = json.Unmarshal([]byte(content), &global.Config)
 
-	if global.Config.Port != 0 {
+	if global.Config.Port == 0 {
 		port, err := utils.GetFreePort()
 		if err != nil {
 			panic(err)
@@ -109,7 +109,7 @@ func InitConfig() {
 		global.Config.Port = port
 	}
 
-	if global.Config.Host != "" {
+	if global.Config.Host == "" {
 		addr, err := utils.GetCurrentHost()
 		if err != nil {
 			panic(err)

@@ -9,11 +9,42 @@ import (
 	"regexp"
 )
 
-type MobileLoginRequest struct {
-	Mobile    string `json:"mobile" form:"mobile" binding:"required,mobile"`
-	Password  string `json:"password" form:"password" binding:"required,min=3"`
-	Captcha   string `json:"captcha" form:"captcha" binding:"required"`
-	CaptchaId string `json:"captcha_id" form:"captcha_id" binding:"required"`
+type MobileLoginByPasswordRequest struct {
+	Mobile   string `json:"mobile" form:"mobile" binding:"required,mobile"`
+	Password string `json:"password" form:"password" binding:"required,min=3"`
+	//Captcha   string `json:"captcha" form:"captcha" binding:"required"`
+	//CaptchaId string `json:"captcha_id" form:"captcha_id" binding:"required"`
+}
+
+func MobileLoginRequestGet(c *gin.Context) (MobileLoginByPasswordRequest, error) {
+	var mobileLoginRequest MobileLoginByPasswordRequest
+	if err := c.ShouldBind(&mobileLoginRequest); err != nil {
+		e, ok := err.(validator.ValidationErrors)
+		if ok {
+			c.JSON(http.StatusBadRequest, utils.ErrorJson("验证错误", utils.RemoveTopName(e.Translate(global.Trans))))
+		}
+		//handle error
+		return mobileLoginRequest, err
+	}
+	return mobileLoginRequest, nil
+}
+
+type MobileLoginByCodeRequest struct {
+	Mobile string `json:"mobile" form:"mobile" binding:"required,mobile"`
+	Code   string `json:"code" form:"code" binding:"required"`
+}
+
+func MobileLoginByCodeRequestGet(c *gin.Context) (MobileLoginByCodeRequest, error) {
+	var mobileLoginRequest MobileLoginByCodeRequest
+	if err := c.ShouldBind(&mobileLoginRequest); err != nil {
+		e, ok := err.(validator.ValidationErrors)
+		if ok {
+			c.JSON(http.StatusBadRequest, utils.ErrorJson("验证错误", utils.RemoveTopName(e.Translate(global.Trans))))
+		}
+		//handle error
+		return mobileLoginRequest, err
+	}
+	return mobileLoginRequest, nil
 }
 
 func ValidateMobile(fl validator.FieldLevel) bool {
@@ -22,37 +53,22 @@ func ValidateMobile(fl validator.FieldLevel) bool {
 	return ok
 }
 
-type MobileRequest struct {
-	Mobile string `json:"mobile" form:"mobile" binding:"required,mobile"`
-	Type   string `json:"type" form:"type" binding:"required,oneof=register login'"`
+type MobileRegisterRequest struct {
+	Mobile      string `json:"mobile" form:"mobile" binding:"required,mobile"`
+	Password    string `json:"password" form:"password" binding:"required,min=3"`
+	Code        string `json:"code" form:"code" binding:"required"`
+	CurrentRole int32  `json:"current_role" form:"current_role" binding:"required,oneof=0 1"`
 }
 
-func MobileSmsLoginRequestGet(c *gin.Context) (MobileRequest, error) {
-	var mobileRequest MobileRequest
-	if err := c.ShouldBind(&mobileRequest); err != nil {
+func MobileRegisterRequestGet(c *gin.Context) (MobileRegisterRequest, error) {
+	var mobileRegister MobileRegisterRequest
+	if err := c.ShouldBind(&mobileRegister); err != nil {
 		e, ok := err.(validator.ValidationErrors)
 		if ok {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"errors": utils.RemoveTopName(e.Translate(global.Trans)),
-			})
+			c.JSON(http.StatusBadRequest, utils.ErrorJson("验证错误", utils.RemoveTopName(e.Translate(global.Trans))))
 		}
 		//handle error
-		return mobileRequest, err
+		return mobileRegister, err
 	}
-	return mobileRequest, nil
-}
-
-func MobileLoginRequestGet(c *gin.Context) (MobileLoginRequest, error) {
-	var mobileLoginRequest MobileLoginRequest
-	if err := c.ShouldBind(&mobileLoginRequest); err != nil {
-		e, ok := err.(validator.ValidationErrors)
-		if ok {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"errors": utils.RemoveTopName(e.Translate(global.Trans)),
-			})
-		}
-		//handle error
-		return mobileLoginRequest, err
-	}
-	return mobileLoginRequest, nil
+	return mobileRegister, nil
 }
