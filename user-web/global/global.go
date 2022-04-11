@@ -7,8 +7,8 @@ import (
 )
 
 var (
-	Config      *config.ServerConfig = &config.ServerConfig{}
-	NacosConfig *config.NacosConfig  = &config.NacosConfig{}
+	Config      = &config.ServerConfig{}
+	NacosConfig = &config.NacosConfig{}
 	Trans       ut.Translator
 	UserServCon proto.UserClient
 	Debug       bool

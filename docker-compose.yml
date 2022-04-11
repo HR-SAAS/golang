@@ -3,18 +3,37 @@ version: '3'
 networks:
   go:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.1/24
 
 services:
   user-web:
     build:
       context: ./user-web
     environment:
-      DEBUG: true
-      GIN_MODE: release
-
+      DEBUG: "true"
+      GIN_MODE: "debug"
+      NACOS_HOST: "${NACOS_HOST}"
+      NACOS_PORT: "${NACOS_PORT}"
+      NACOS_USERNAME: "${NACOS_USERNAME}"
+      NACOS_PASSWORD: "${NACOS_PASSWORD}"
+      NACOS_DATA_ID: "${USER_NACOS_DATA_ID}"
+      NACOS_GROUP: "${USER_NACOS_GROUP}"
+      NACOS_NAMESPACE: "${USER_NACOS_NAMESPACE}"
+    volumes:
+      - ./user-web/config-debug.yml:/app/config-debug.yml
   company-web:
     build:
       context: ./company-web
     environment:
-      DEBUG: true
-      GIN_MODE: release
+      DEBUG: "true"
+      GIN_MODE: "release"
+      NACOS_HOST: "${NACOS_HOST}"
+      NACOS_PORT: "${NACOS_PORT}"
+      NACOS_USERNAME: "${NACOS_USERNAME}"
+      NACOS_PASSWORD: "${NACOS_PASSWORD}"
+      NACOS_DATA_ID: "${COMPANY_NACOS_DATA_ID}"
+      NACOS_GROUP: "${COMPANY_NACOS_GROUP}"
+      NACOS_NAMESPACE: "${COMPANY_NACOS_NAMESPACE}"

@@ -45,6 +45,7 @@ func InitConfig() {
 	//})
 
 	v := viper.New()
+
 	v.AutomaticEnv()
 	debug := v.GetBool("DEBUG")
 	global.Debug = debug
@@ -61,15 +62,15 @@ func InitConfig() {
 	}
 	// 读取nacos文件
 	err = v.Unmarshal(global.NacosConfig)
-	zap.S().Infof("加载nacos配置文件 : %s", global.NacosConfig)
+	zap.S().Infof("加载nacos配置文件 : %v", global.NacosConfig)
 	if err != nil {
 		panic(err)
 	}
 
 	sc := []constant.ServerConfig{
 		{
-			IpAddr: "localhost",
-			Port:   8848,
+			IpAddr: global.NacosConfig.Host,
+			Port:   uint64(global.NacosConfig.Port),
 		},
 	}
 	cc := constant.ClientConfig{
@@ -79,6 +80,8 @@ func InitConfig() {
 		LogDir:              "tmp/nacos/log",
 		CacheDir:            "tmp/nacos/cache",
 		LogLevel:            "debug",
+		Username:            global.NacosConfig.Username,
+		Password:            global.NacosConfig.Password,
 	}
 
 	client, err := clients.NewConfigClient(
