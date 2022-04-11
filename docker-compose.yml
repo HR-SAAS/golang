@@ -1,12 +1,9 @@
 version: '3'
 
 networks:
-  go:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 192.168.2.1/24
+  default:
+    external:
+      name: hr-saas
 
 services:
   user-web:
@@ -24,8 +21,7 @@ services:
       NACOS_NAMESPACE: "${USER_NACOS_NAMESPACE}"
     volumes:
       - ./user-web/config-debug.yml:/app/config-debug.yml
-    networks:
-      - go
+
   company-web:
     build:
       context: ./company-web
@@ -39,5 +35,3 @@ services:
       NACOS_DATA_ID: "${COMPANY_NACOS_DATA_ID}"
       NACOS_GROUP: "${COMPANY_NACOS_GROUP}"
       NACOS_NAMESPACE: "${COMPANY_NACOS_NAMESPACE}"
-    networks:
-      - go
