@@ -77,7 +77,6 @@ func Register(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, utils.ErrorJson("验证码错误"))
 		return
 	}
-
 	if user, _ := global.UserServCon.FindUserByMobile(context.Background(), &proto.MobileRequest{Mobile: registerRequest.Mobile}); user != nil {
 		ctx.JSON(http.StatusOK, utils.ErrorJson("您已注册过，请勿重复注册"))
 		return

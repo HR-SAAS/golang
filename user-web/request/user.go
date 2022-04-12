@@ -57,7 +57,7 @@ type MobileRegisterRequest struct {
 	Mobile      string `json:"mobile" form:"mobile" binding:"required,mobile"`
 	Password    string `json:"password" form:"password" binding:"required,min=3"`
 	Code        string `json:"code" form:"code" binding:"required"`
-	CurrentRole int32  `json:"current_role" form:"current_role" binding:"required,oneof=0 1"`
+	CurrentRole int32  `json:"current_role" form:"current_role" binding:"required,oneof=1 2"`
 }
 
 func MobileRegisterRequestGet(c *gin.Context) (MobileRegisterRequest, error) {
@@ -66,8 +66,9 @@ func MobileRegisterRequestGet(c *gin.Context) (MobileRegisterRequest, error) {
 		e, ok := err.(validator.ValidationErrors)
 		if ok {
 			c.JSON(http.StatusBadRequest, utils.ErrorJson("验证错误", utils.RemoveTopName(e.Translate(global.Trans))))
+		} else {
+			c.JSON(http.StatusBadRequest, utils.ErrorJson("错误的请求"))
 		}
-		//handle error
 		return mobileRegister, err
 	}
 	return mobileRegister, nil

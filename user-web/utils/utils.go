@@ -56,11 +56,11 @@ func HandleGrpcError(err error, ctx *gin.Context, errMsgs ...string) {
 		case codes.NotFound:
 			ctx.JSON(http.StatusNotFound, MakeTrans(1, errMsgArr[0], nil))
 		case codes.InvalidArgument:
-			ctx.JSON(http.StatusNotFound, MakeTrans(1, errMsgArr[1], nil))
+			ctx.JSON(http.StatusOK, MakeTrans(1, errMsgArr[1], nil))
 		case codes.Internal:
-			ctx.JSON(http.StatusNotFound, MakeTrans(1, errMsgArr[2], nil))
+			ctx.JSON(http.StatusOK, MakeTrans(1, errMsgArr[2], nil))
 		default:
-			ctx.JSON(http.StatusNotFound, MakeTrans(1, errMsgArr[3], nil))
+			ctx.JSON(http.StatusOK, MakeTrans(1, errMsgArr[3], nil))
 		}
 	}
 }
