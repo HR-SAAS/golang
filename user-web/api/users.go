@@ -65,7 +65,7 @@ func Register(ctx *gin.Context) {
 	}
 	// 获取验证码
 	key := fmt.Sprintf("%s_register", registerRequest.Mobile)
-	rdb := utils.NewRedis()
+	rdb := global.Rdb
 	code := rdb.Get(context.Background(), key)
 	// 验证码为空=>失效
 	if code.Val() == "" {
