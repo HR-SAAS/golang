@@ -35,7 +35,6 @@ func GetSmsCaptcha(ctx *gin.Context) {
 	mobileRequest, err := request.MobileSmsLoginRequestGet(ctx)
 	// 发送短信
 	if err != nil {
-		ctx.JSON(http.StatusOK, utils.ErrorJson("手机号不正确"))
 		return
 	}
 	rdb := utils.NewRedis()

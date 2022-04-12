@@ -69,7 +69,7 @@ func Register(ctx *gin.Context) {
 	code := rdb.Get(context.Background(), key)
 	// 验证码为空=>失效
 	if code.Val() == "" {
-		ctx.JSON(http.StatusOK, utils.ErrorJson("验证码已失效"))
+		ctx.JSON(http.StatusOK, utils.ErrorJson("还未发送验证码"))
 		return
 	}
 
