@@ -37,7 +37,8 @@ func GetSmsCaptcha(ctx *gin.Context) {
 	if err != nil {
 		return
 	}
-	rdb := utils.NewRedis()
+	rdb := global.Rdb
+
 	key := fmt.Sprintf("%s_%s", mobileRequest.Mobile, mobileRequest.Type)
 	// 获取缓存
 	// lock
@@ -75,7 +76,6 @@ func GetSmsCaptcha(ctx *gin.Context) {
 	// 发送手机验证码
 
 	// redis 存储次数和验证码内容
-
 	rdb.Set(context.Background(), key, code, time.Minute*5)
 	rdb.Set(context.Background(), fmt.Sprintf("%s_lock", mobileRequest.Mobile), code, time.Minute)
 

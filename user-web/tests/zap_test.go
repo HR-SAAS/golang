@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"go.uber.org/zap"
@@ -49,4 +50,10 @@ func Test_func(t *testing.T) {
 	}
 	paramJson, err := json.Marshal(s)
 	fmt.Printf("%s: %s\n", string(paramJson), err)
+}
+
+func Test_func2(t *testing.T) {
+	rdb := utils.NewRedis()
+	rdb.Conn(context.Background())
+	print(rdb.Set(context.Background(), "1", 2, time.Minute).Err().Error())
 }

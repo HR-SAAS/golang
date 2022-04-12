@@ -28,6 +28,7 @@ func main() {
 	initial.InitApiRoute(app)
 	// 初始化表单 验证
 	initial.InitValidator()
+	initial.InitRedis()
 
 	//注册
 	config := global.Config

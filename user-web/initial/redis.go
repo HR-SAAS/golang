@@ -1,14 +1,15 @@
 package initial
 
 import (
-	"fmt"
-	redis "github.com/go-redis/redis/v8"
+	"context"
 	"hr-saas-go/user-web/global"
+	"hr-saas-go/user-web/utils"
 )
 
-func NewRedis() *redis.Client {
-	rdb := redis.NewClient(&redis.Options{
-		Addr: fmt.Sprintf("%s:%d", global.Config.RedisConfig.Host, global.Config.RedisConfig.Port),
-	})
-	return rdb
+func InitRedis() {
+	global.Rdb = utils.NewRedis()
+	_, err := global.Rdb.Ping(context.Background()).Result()
+	if err != nil {
+		panic(err)
+	}
 }

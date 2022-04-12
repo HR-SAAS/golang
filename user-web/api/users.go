@@ -106,11 +106,11 @@ func LoginByCode(ctx *gin.Context) {
 		return
 	}
 	key := fmt.Sprintf("%s_login", mobileRequest.Mobile)
-	rdb := utils.NewRedis()
+	rdb := global.Rdb
 	code := rdb.Get(context.Background(), key)
 	// 获取缓存
 	if code.Val() == "" {
-		ctx.JSON(http.StatusOK, utils.ErrorJson("验证码已失效"))
+		ctx.JSON(http.StatusOK, utils.ErrorJson("还未发送验证码"))
 		return
 	}
 
