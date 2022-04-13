@@ -11,6 +11,7 @@ func InitUserRouter(group *gin.RouterGroup) {
 	{
 		userGroup.GET("/", api.GetUserList)
 		userGroup.GET("info", api.GetInfo)
+		userGroup.PUT("update", api.Update)
 		userGroup.GET(":id", api.Show)
 	}
 	authGroup := group.Group("auth")

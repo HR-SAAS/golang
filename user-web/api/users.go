@@ -30,8 +30,28 @@ func GetUserList(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, list)
 }
 
-func Update() {
+func Update(ctx *gin.Context) {
+	req, err := request.UpdateUserRequestGet(ctx)
+	if err != nil {
+		return
+	}
+	id := req.Id
+	if id == 0 {
+		id = ctx.GetInt64("userId")
+	}
+	//req
+	_, err = global.UserServCon.UpdateUser(context.Background(), &proto.UpdateUserRequest{
+		Id:       id,
+		NickName: req.NickName,
+		Sex:      req.Sex,
+		Avatar:   req.Avatar,
+	})
 
+	if err != nil {
+		utils.HandleGrpcError(err, ctx)
+		return
+	}
+	ctx.JSON(http.StatusOK, utils.SuccessJson(nil))
 }
 
 // GetInfo 用于返回信息
@@ -43,7 +63,12 @@ func GetInfo(ctx *gin.Context) {
 		utils.HandleGrpcError(err, ctx)
 		return
 	}
-	ctx.JSON(http.StatusOK, utils.SuccessJson(user))
+	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
+		"name":      user.Name,
+		"nick_name": user.NickName,
+		"mobile":    user.Mobile,
+		"sex":       user.Sex,
+	}))
 }
 
 // Show 获取某角色信息
@@ -54,7 +79,13 @@ func Show(ctx *gin.Context) {
 		utils.HandleGrpcError(err, ctx)
 		return
 	}
-	ctx.JSON(http.StatusOK, utils.SuccessJson(user))
+	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
+		"name":         user.Name,
+		"nick_name":    user.NickName,
+		"mobile":       user.Mobile,
+		"sex":          user.Sex,
+		"current_role": user.CurrentRole,
+	}))
 }
 
 func Register(ctx *gin.Context) {
