@@ -41,10 +41,11 @@ func Update(ctx *gin.Context) {
 	}
 	//req
 	_, err = global.UserServCon.UpdateUser(context.Background(), &proto.UpdateUserRequest{
-		Id:       id,
-		NickName: req.NickName,
-		Sex:      req.Sex,
-		Avatar:   req.Avatar,
+		Id:          id,
+		NickName:    req.NickName,
+		Sex:         req.Sex,
+		Avatar:      req.Avatar,
+		CurrentRole: -1,
 	})
 
 	if err != nil {
@@ -64,10 +65,11 @@ func GetInfo(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
-		"name":      user.Name,
-		"nick_name": user.NickName,
-		"mobile":    user.Mobile,
-		"sex":       user.Sex,
+		"name":         user.Name,
+		"nick_name":    user.NickName,
+		"mobile":       user.Mobile,
+		"sex":          user.Sex,
+		"current_role": user.CurrentRole,
 	}))
 }
 
