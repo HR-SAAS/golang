@@ -33,11 +33,11 @@ type ServerConfig struct {
 }
 
 type NacosConfig struct {
-	Host      string `mapstructure:"host"`
-	Port      int    `mapstructure:"port"`
-	Username  string `mapstructure:"username"`
-	Password  string `mapstructure:"password"`
-	Namespace string `mapstructure:"namespace"`
-	DataId    string `mapstructure:"data-id"`
-	Group     string `mapstructure:"group"`
+	Host      string `mapstructure:"nacos_host"`
+	Port      int    `mapstructure:"nacos_port"`
+	Namespace string `mapstructure:"nacos_namespace"`
+	DataId    string `mapstructure:"nacos_data_id"`
+	Group     string `mapstructure:"nacos_group"`
+	Username  string `mapstructure:"nacos_name"`
+	Password  string `mapstructure:"nacos_password"`
 }

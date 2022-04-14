@@ -37,7 +37,7 @@ func (c *ConsulRegister) Register(name string, id string, address string, port i
 		Address: address,
 		Check: &api.AgentServiceCheck{
 			Name:                           name,
-			Interval:                       "5s",
+			Interval:                       "10s",
 			Timeout:                        "5s",
 			HTTP:                           fmt.Sprintf("http://%s:%d/api/health", address, port),
 			DeregisterCriticalServiceAfter: "5s",

@@ -12,4 +12,5 @@ var (
 	Trans             ut.Translator
 	CompanyServCon    proto.CompanyClient
 	DepartmentServCon proto.DepartmentClient
+	Debug             bool
 )

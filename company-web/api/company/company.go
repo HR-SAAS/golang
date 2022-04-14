@@ -1,6 +1,7 @@
 package company
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -59,7 +60,7 @@ func Create(ctx *gin.Context) {
 		tags, _ := json.Marshal(req.Tags)
 		Tags = string(tags)
 	}
-	res, err := global.CompanyServCon.CreateCompany(ctx, &proto.CreateCompanyRequest{
+	res, err := global.CompanyServCon.CreateCompany(context.Background(), &proto.CreateCompanyRequest{
 		Name:      req.Name,
 		Desc:      req.Desc,
 		Website:   req.Website,
@@ -72,10 +73,21 @@ func Create(ctx *gin.Context) {
 		Status:    1,
 	})
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("系统错误"))
+		utils.HandleGrpcError(err, ctx)
 		return
 	}
-	ctx.JSON(http.StatusOK, utils.SuccessJson(res))
+	_, err = global.CompanyServCon.CreateUserCompany(context.Background(), &proto.SaveUserCompanyRequest{
+		UserId:       ctx.GetInt64("userId"),
+		CompanyId:    res.Id,
+		Status:       1,
+		DepartmentId: 0,
+		Remark:       "Boss",
+	})
+	if err != nil {
+		utils.HandleGrpcError(err, ctx)
+		return
+	}
+	ctx.JSON(http.StatusOK, utils.SuccessJson(res.Id))
 	return
 }
 

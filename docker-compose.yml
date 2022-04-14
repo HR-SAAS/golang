@@ -27,7 +27,7 @@ services:
       context: ./company-web
     environment:
       DEBUG: "true"
-      GIN_MODE: "release"
+      GIN_MODE: "debug"
       NACOS_HOST: "${NACOS_HOST}"
       NACOS_PORT: "${NACOS_PORT}"
       NACOS_USERNAME: "${NACOS_USERNAME}"
@@ -35,3 +35,5 @@ services:
       NACOS_DATA_ID: "${COMPANY_NACOS_DATA_ID}"
       NACOS_GROUP: "${COMPANY_NACOS_GROUP}"
       NACOS_NAMESPACE: "${COMPANY_NACOS_NAMESPACE}"
+    volumes:
+      - ./company-web/config-debug.yml:/app/config-debug.yml
