@@ -137,7 +137,10 @@ func MyCompany(ctx *gin.Context) {
 		utils.HandleGrpcError(err, ctx)
 		return
 	}
-	ctx.JSON(http.StatusOK, utils.SuccessJson(res))
+	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
+		"total": res.Total,
+		"data":  res.Data,
+	}))
 	return
 }
 
