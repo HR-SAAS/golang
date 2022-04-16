@@ -24,7 +24,6 @@ func List(ctx *gin.Context) {
 		Limit:     int32(limit),
 		CompanyId: int64(companyId),
 		Search:    "",
-		Order:     "",
 	})
 	if err != nil {
 		zap.S().Errorf("company service call err: %s", err.Error())
@@ -115,32 +114,30 @@ func Update(ctx *gin.Context) {
 
 func Delete(ctx *gin.Context) {
 	// 是否展示创建者
-	id := ctx.Param("id")
-	if idInt, err := strconv.Atoi(id); err == nil {
-		data, err := global.DepartmentServCon.DeleteDepartment(ctx, &proto.DeleteDepartmentRequest{
-			Id: int64(idInt),
-		})
-		if err != nil {
-			zap.S().Errorf("err: %s", err)
-			ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("系统错误"))
-			return
-		}
-		ctx.JSON(http.StatusOK, utils.SuccessJson(data))
+	id, _ := strconv.Atoi(ctx.Param("id"))
+	if id == 0 {
+		ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("id不正确"))
 		return
 	}
-	ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("id不正确"))
+
+	data, err := global.DepartmentServCon.DeleteDepartment(ctx, &proto.DeleteDepartmentRequest{
+		Id: int64(id),
+	})
+	if err != nil {
+		zap.S().Errorf("err: %s", err)
+		utils.HandleGrpcError(err, ctx)
+		return
+	}
+	ctx.JSON(http.StatusOK, utils.SuccessJson(data))
 	return
 }
 
 // MyDepartment 我加入的
 func MyDepartment(ctx *gin.Context) {
-	userId, ok := ctx.Get("userId")
-	if !ok {
-		ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("系统错误"))
-		return
-	}
+	userId := ctx.GetInt64("userId")
+
 	res, err := global.DepartmentServCon.GetMyDepartmentList(ctx, &proto.GetMyDepartmentListRequest{
-		UserId: userId.(int64),
+		UserId: userId,
 	})
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("系统错误"))
