@@ -9,15 +9,15 @@ import (
 )
 
 type DepartmentSaveRequest struct {
-	Id        int64  ` form:"id" binding:"required" json:"id"`
-	CompanyId int64  ` form:"company_id" binding:"required" json:"company_id"`
-	ParentId  int64  ` form:"parent_id" binding:"required" json:"parent_id"`
-	Icon      int64  ` form:"icon" binding:"" json:"icon"`
+	Id        int64  ` form:"id" binding:"" json:"id"`
+	CompanyId int64  ` form:"company_id" binding:"" json:"company_id"`
+	ParentId  int64  ` form:"parent_id" binding:"" json:"parent_id"`
+	Icon      string ` form:"icon" binding:"" json:"icon"`
 	Name      string ` form:"name" binding:"required" json:"name"`
 	Remark    string ` form:"remark" binding:"" json:"remark"`
 	Desc      string ` form:"desc" binding:"" json:"desc"`
 	Info      string ` form:"info" binding:"" json:"info"`
-	Status    int32  `form:"status" json:"status"`
+	Status    int32  ` form:"status" json:"status"`
 }
 
 func DepartmentSaveRequestGet(c *gin.Context) (DepartmentSaveRequest, error) {
@@ -25,9 +25,7 @@ func DepartmentSaveRequestGet(c *gin.Context) (DepartmentSaveRequest, error) {
 	if err := c.ShouldBind(&request); err != nil {
 		e, ok := err.(validator.ValidationErrors)
 		if ok {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"errors": utils.RemoveTopName(e.Translate(global.Trans)),
-			})
+			c.JSON(http.StatusBadRequest, utils.ErrorJson("验证错误", utils.RemoveTopName(e.Translate(global.Trans))))
 		}
 		//handle error
 		return request, err

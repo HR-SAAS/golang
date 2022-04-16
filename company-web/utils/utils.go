@@ -28,8 +28,11 @@ func SuccessJson(data interface{}) gin.H {
 	return MakeTrans(0, "success", data)
 }
 
-func ErrorJson(msg string) gin.H {
-	return MakeTrans(1, msg, nil)
+func ErrorJson(msg string, data ...interface{}) gin.H {
+	if len(data) == 1 {
+		return MakeTrans(1, msg, data[0])
+	}
+	return MakeTrans(1, msg, data)
 
 }
 
@@ -48,17 +51,17 @@ func HandleGrpcError(err error, ctx *gin.Context, errMsgs ...string) {
 		zap.S().Infof("change err %s", errMsg)
 		errMsgArr[index] = errMsg
 	}
-	zap.S().Errorf("service call err: %s", err.Error())
+	zap.S().Errorf(" err %s", err)
 	if st, ok := status.FromError(err); ok {
 		switch st.Code() {
 		case codes.NotFound:
 			ctx.JSON(http.StatusNotFound, MakeTrans(1, errMsgArr[0], nil))
 		case codes.InvalidArgument:
-			ctx.JSON(http.StatusNotFound, MakeTrans(1, errMsgArr[1], nil))
+			ctx.JSON(http.StatusOK, MakeTrans(1, errMsgArr[1], nil))
 		case codes.Internal:
-			ctx.JSON(http.StatusNotFound, MakeTrans(1, errMsgArr[2], nil))
+			ctx.JSON(http.StatusOK, MakeTrans(1, errMsgArr[2], nil))
 		default:
-			ctx.JSON(http.StatusNotFound, MakeTrans(1, errMsgArr[3], nil))
+			ctx.JSON(http.StatusOK, MakeTrans(1, errMsgArr[3], nil))
 		}
 	}
 }

@@ -47,17 +47,20 @@ func Create(ctx *gin.Context) {
 		return
 	}
 	userId := ctx.GetInt64("userId")
-	res, err := global.CompanyServCon.CreateCompany(context.Background(), &proto.CreateCompanyRequest{
-		Name:      req.Name,
-		Desc:      req.Desc,
-		Website:   req.Website,
-		Config:    req.Config,
-		Address:   req.Address,
-		Info:      req.Info,
-		CreatorId: userId,
-		ParentId:  req.ParentId,
-		Status:    1,
-	})
+	res, err := global.CompanyServCon.CreateCompany(
+		context.Background(), &proto.CreateCompanyRequest{
+			Name:      req.Name,
+			Desc:      req.Desc,
+			Website:   req.Website,
+			Config:    req.Config,
+			Address:   req.Address,
+			Tags:      req.Tags,
+			Info:      req.Info,
+			CreatorId: userId,
+			Logo:      req.Logo,
+			ParentId:  req.ParentId,
+			Status:    1,
+		})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)
 		return
@@ -108,7 +111,6 @@ func Delete(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("id不正确"))
 		return
 	}
-	// TODO 鉴权
 	data, err := global.CompanyServCon.DeleteCompany(ctx, &proto.DeleteCompanyRequest{
 		Id: int64(id),
 	})

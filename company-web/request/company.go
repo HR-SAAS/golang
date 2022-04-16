@@ -17,6 +17,7 @@ type CompanySaveRequest struct {
 	Tags     []string `json:"tags" form:"tags" binding:""`
 	Info     string   `json:"info" form:"info" binding:""`
 	ParentId int64    `json:"parent_id" form:"creator_id" binding:""`
+	Logo     string   `json:"logo" form:"logo" binding:""`
 }
 
 func CompanySaveRequestGet(c *gin.Context) (CompanySaveRequest, error) {
@@ -24,9 +25,7 @@ func CompanySaveRequestGet(c *gin.Context) (CompanySaveRequest, error) {
 	if err := c.ShouldBind(&request); err != nil {
 		e, ok := err.(validator.ValidationErrors)
 		if ok {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"errors": utils.RemoveTopName(e.Translate(global.Trans)),
-			})
+			c.JSON(http.StatusBadRequest, utils.ErrorJson("验证错误", utils.RemoveTopName(e.Translate(global.Trans))))
 		}
 		//handle error
 		return request, err

@@ -51,6 +51,7 @@ func HandleGrpcError(err error, ctx *gin.Context, errMsgs ...string) {
 		zap.S().Infof("change err %s", errMsg)
 		errMsgArr[index] = errMsg
 	}
+	zap.S().Errorf(" err %s", err)
 	if st, ok := status.FromError(err); ok {
 		switch st.Code() {
 		case codes.NotFound:
