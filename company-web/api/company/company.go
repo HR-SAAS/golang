@@ -147,13 +147,13 @@ func MyCompany(ctx *gin.Context) {
 }
 
 func GetCompanyUsers(ctx *gin.Context) {
-	companyId, err := strconv.Atoi(ctx.Param("companyId"))
+	companyId, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		ctx.JSON(http.StatusOK, utils.ErrorJson("参数错误"))
 		return
 	}
 	page, limit := utils.GetPage(ctx)
-	res, err := global.CompanyServCon.GetCompanyUserIdList(ctx, &proto.GetCompanyUserListRequest{
+	realations, err := global.CompanyServCon.GetCompanyUserIdList(ctx, &proto.GetCompanyUserListRequest{
 		Page:      page,
 		Limit:     limit,
 		CompanyId: int64(companyId),
@@ -163,5 +163,43 @@ func GetCompanyUsers(ctx *gin.Context) {
 		return
 	}
 	// 使用用户服务进行获取userList
-	print(res.Data)
+	ids := make([]int64, 0, limit)
+
+	for _, v := range realations.Data {
+		ids = append(ids, v.UserId)
+	}
+
+	usersRes, err := global.UserServCon.GetUserListByIds(ctx, &proto.GetUserListByIdsRequest{
+		Ids: ids,
+	})
+	if err != nil {
+		utils.HandleGrpcError(err, ctx)
+		return
+	}
+
+	users := map[int64]interface{}{}
+
+	for _, v := range usersRes.Data {
+		users[v.Id] = v
+	}
+
+	result := make([]interface{}, 0, limit)
+	for _, v := range realations.Data {
+		result = append(result, map[string]interface{}{
+			"user":       users[v.UserId],
+			"user_id":    v.UserId,
+			"nick_name":  v.NickName,
+			"info":       v.Info,
+			"status":     v.Status,
+			"department": v.DepartmentId,
+			"remark":     v.Remark,
+			"created_at": v.CreatedAt.AsTime().Format("2006-01-02 15:04:05"),
+			"updated_at": v.UpdatedAt.AsTime().Format("2006-01-02 15:04:05"),
+		})
+	}
+
+	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
+		"data":  result,
+		"total": realations.Total,
+	}))
 }

@@ -13,22 +13,21 @@ func InitCompanyRouter(group *gin.RouterGroup) {
 	{
 		companyRouter.GET("/", company.List)
 		companyRouter.GET("/my", company.MyCompany)
-		companyRouter.GET(":id", company.Show)
+		companyRouter.GET("/:id", company.Show)
+		companyRouter.GET("/:id/users", company.GetCompanyUsers)
 		companyRouter.POST("/", company.Create)
 		companyRouter.PUT("/:id", company.Update)
-		companyRouter.DELETE(":id", company.Delete)
+		companyRouter.DELETE("/:id", company.Delete)
 		// 用户相关
-		companyRouter.GET("/users")
-		// 统计相关
 	}
 	departmentRouter := group.Group("/department").Use(middleware.JWTAuth())
 	{
 		departmentRouter.GET("/", department.List)
 		departmentRouter.GET("/my", department.MyDepartment)
-		departmentRouter.GET(":id", department.Show)
+		departmentRouter.GET("/:id", department.Show)
 		departmentRouter.POST("/", department.Create)
-		departmentRouter.PUT(":id", department.Update)
-		departmentRouter.DELETE(":id", department.Delete)
+		departmentRouter.PUT("/:id", department.Update)
+		departmentRouter.DELETE("/:id", department.Delete)
 		// 统计相关
 	}
 }
