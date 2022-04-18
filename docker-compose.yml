@@ -37,3 +37,19 @@ services:
       NACOS_NAMESPACE: "${COMPANY_NACOS_NAMESPACE}"
     volumes:
       - ./company-web/config-debug.yml:/app/config-debug.yml
+
+  upload-web:
+    build:
+      context: ./upload-web
+    environment:
+      DEBUG: "true"
+      GIN_MODE: "debug"
+      NACOS_HOST: "${NACOS_HOST}"
+      NACOS_PORT: "${NACOS_PORT}"
+      NACOS_USERNAME: "${NACOS_USERNAME}"
+      NACOS_PASSWORD: "${NACOS_PASSWORD}"
+      NACOS_DATA_ID: "${UPLOAD_NACOS_DATA_ID}"
+      NACOS_GROUP: "${UPLOAD_NACOS_GROUP}"
+      NACOS_NAMESPACE: "${UPLOAD_NACOS_NAMESPACE}"
+    volumes:
+      - ./company-web/config-debug.yml:/app/config-debug.yml

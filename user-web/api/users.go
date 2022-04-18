@@ -70,6 +70,7 @@ func GetInfo(ctx *gin.Context) {
 		"mobile":       user.Mobile,
 		"sex":          user.Sex,
 		"current_role": user.CurrentRole,
+		"avatar":       user.Avatar,
 	}))
 }
 
