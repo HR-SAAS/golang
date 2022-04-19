@@ -11,6 +11,7 @@ func InitCompanyRouter(group *gin.RouterGroup) {
 	companyRouter := group.Group("/resume").Use(middleware.JWTAuth())
 	{
 		companyRouter.GET("/", api.List)
+		companyRouter.GET("/count", api.Count)
 		companyRouter.GET("/:id", api.Show)
 		companyRouter.POST("/", api.Create)
 		companyRouter.PUT("/:id", api.Update)

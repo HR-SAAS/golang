@@ -34,7 +34,7 @@ func InitCompanyRouter(group *gin.RouterGroup) {
 	{
 		departmentRouter.GET("/", department.List)
 		departmentRouter.GET("/my", department.MyDepartment)
-		companyRouter.GET("/count", company.MyCompany)
+		departmentRouter.GET("/count", company.MyCompany)
 		departmentRouter.GET("/:id", department.Show)
 		departmentRouter.POST("/", department.Create)
 		departmentRouter.PUT("/:id", department.Update)

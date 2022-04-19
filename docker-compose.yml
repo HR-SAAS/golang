@@ -56,7 +56,7 @@ services:
 
   resume-web:
     build:
-      context: ./upload-web
+      context: ./resume-web
     environment:
       DEBUG: "true"
       GIN_MODE: "debug"
