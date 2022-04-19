@@ -5,17 +5,21 @@ import (
 	"github.com/gin-gonic/gin"
 	"hr-saas-go/resume-web/global"
 	"hr-saas-go/resume-web/proto"
+	"hr-saas-go/resume-web/request"
 	"hr-saas-go/resume-web/utils"
 	"net/http"
 	"strconv"
 )
 
-// 增删改查
-
 func List(ctx *gin.Context) {
+	userId := ctx.GetInt64("userId")
 	list, err := global.ResumeServCon.GetResumeList(ctx, &proto.GetResumeListRequest{
 		Page:  1,
 		Limit: 10,
+		Sort:  nil,
+		Search: map[string]string{
+			"user_id": strconv.FormatInt(userId, 10),
+		},
 	})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)
@@ -30,6 +34,7 @@ func Show(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, utils.ErrorJson("id不正确"))
 		return
 	}
+	// police
 
 	data, err := global.ResumeServCon.GetResumeDetail(ctx, &proto.GetResumeDetailRequest{
 		Id: int64(id),
@@ -50,17 +55,12 @@ func Create(ctx *gin.Context) {
 	userId := ctx.GetInt64("userId")
 	res, err := global.ResumeServCon.CreateResume(
 		context.Background(), &proto.CreateResumeRequest{
-			Name:      req.Name,
-			Desc:      req.Desc,
-			Website:   req.Website,
-			Config:    req.Config,
-			Address:   req.Address,
-			Tags:      req.Tags,
-			Info:      req.Info,
-			CreatorId: userId,
-			Logo:      req.Logo,
-			ParentId:  req.ParentId,
-			Status:    1,
+			UserId:  userId,
+			Name:    req.Name,
+			Type:    req.Type,
+			Tag:     req.Tag,
+			Content: req.Content,
+			Status:  req.Status,
 		})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)
@@ -86,9 +86,12 @@ func Update(ctx *gin.Context) {
 		return
 	}
 	_, err = global.ResumeServCon.UpdateResume(ctx, &proto.UpdateResumeRequest{
-		Id:     int64(id),
-		Name:   req.Name,
-		Status: 1,
+		UserId:  userId,
+		Name:    req.Name,
+		Type:    req.Type,
+		Tag:     req.Tag,
+		Content: req.Content,
+		Status:  req.Status,
 	})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)
@@ -99,12 +102,13 @@ func Update(ctx *gin.Context) {
 }
 
 func Delete(ctx *gin.Context) {
-	// 是否展示创建者
 	id, _ := strconv.Atoi(ctx.Param("id"))
 	if id == 0 {
 		ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("id不正确"))
 		return
 	}
+
+	// TODO 判断是否为自己拥有
 	data, err := global.ResumeServCon.DeleteResume(ctx, &proto.DeleteResumeRequest{
 		Id: int64(id),
 	})
