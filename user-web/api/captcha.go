@@ -79,7 +79,10 @@ func GetSmsCaptcha(ctx *gin.Context) {
 	rdb.Set(context.Background(), key, code, time.Minute*5)
 	rdb.Set(context.Background(), fmt.Sprintf("%s_lock", mobileRequest.Mobile), code, time.Minute)
 
-	rdb.Incr(context.Background(), mobileRequest.Mobile)
+	res := rdb.Incr(context.Background(), mobileRequest.Mobile)
+	if res.Val() == 1 {
+		rdb.TTL(context.Background(), mobileRequest.Mobile)
+	}
 	ctx.JSON(http.StatusOK, utils.SuccessJson("发送成功"))
 	return
 }
