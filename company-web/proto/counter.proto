@@ -1,0 +1,37 @@
+syntax = 'proto3';
+
+option go_package = '../proto';
+
+
+service CompanyCounter{
+  // -----------------------统计服务---
+  // 统计一共多少个公司
+  rpc CountCompany(CountCompanyRequest) returns (CompanyCountResponse);
+  // 统计某公司多少人
+  rpc CountCompanyUser(CountCompanyUserRequest) returns (CompanyCountResponse);
+  // 统计公司有多少个部门
+  rpc CountDepartment(CountDepartmentRequest) returns (CompanyCountResponse);
+  // 统计部门人数
+  rpc CountDepartmentUser(CountDepartmentUserRequest) returns (CompanyCountResponse);
+  // 统计其他
+}
+
+message CompanyCountResponse{
+  int64 count = 1;
+}
+
+message CountCompanyRequest{
+  map<string,string> search = 1;
+}
+
+message CountCompanyUserRequest{
+  map<string,string> search = 1;
+}
+
+message CountDepartmentRequest{
+  map<string,string> search = 1;
+}
+
+message CountDepartmentUserRequest{
+  map<string,string> search = 1;
+}
