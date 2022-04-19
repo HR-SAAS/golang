@@ -7,9 +7,10 @@ import (
 )
 
 var (
-	Config        *config.ServerConfig = &config.ServerConfig{}
-	NacosConfig   *config.NacosConfig  = &config.NacosConfig{}
-	Trans         ut.Translator
-	ResumeServCon proto.ResumeClient
-	Debug         bool
+	Config             *config.ServerConfig = &config.ServerConfig{}
+	NacosConfig        *config.NacosConfig  = &config.NacosConfig{}
+	Trans              ut.Translator
+	ResumeServCon      proto.ResumeClient
+	ResumeCountServCon proto.ResumeCounterServiceClient
+	Debug              bool
 )

@@ -38,4 +38,6 @@ func initResume() {
 		panic(err)
 	}
 	global.ResumeServCon = proto.NewResumeClient(con)
+	// 统计服务
+	global.ResumeCountServCon = proto.NewResumeCounterServiceClient(con)
 }

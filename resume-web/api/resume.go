@@ -17,9 +17,11 @@ func List(ctx *gin.Context) {
 	userId := ctx.GetInt64("userId")
 	search["user_id"] = strconv.FormatInt(userId, 10)
 
+	page, limit := utils.GetPage(ctx)
+
 	list, err := global.ResumeServCon.GetResumeList(ctx, &proto.GetResumeListRequest{
-		Page:   1,
-		Limit:  10,
+		Page:   page,
+		Limit:  limit,
 		Sort:   nil,
 		Search: search,
 	})
@@ -110,7 +112,6 @@ func Delete(ctx *gin.Context) {
 		return
 	}
 
-	// TODO 判断是否为自己拥有
 	data, err := global.ResumeServCon.DeleteResume(ctx, &proto.DeleteResumeRequest{
 		Id: int64(id),
 	})
