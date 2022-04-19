@@ -119,4 +119,10 @@ func InitConfig() {
 		}
 		global.Config.Host = addr
 	}
+
+	if global.Config.Tag == nil {
+		global.Config.Tag = []string{
+			"upload-web", "golang", "web",
+		}
+	}
 }

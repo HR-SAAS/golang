@@ -26,6 +26,7 @@ type ServerConfig struct {
 	Host         string        `mapstructure:"host" json:"host"`
 	Port         int           `mapstructure:"port" json:"port"`
 	Name         string        `mapstructure:"name" json:"name"`
+	Tag          []string      `mapstructure:"tag" json:"tag"`
 	UserSrvInfo  UserSrvConfig `mapstructure:"user_srv" json:"user_srv"`
 	Local        string        `mapstructure:"local" json:"local"`
 	JwtConfig    JwtConfig     `mapstructure:"jwt_config" json:"jwt_config"`

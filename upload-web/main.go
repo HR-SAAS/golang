@@ -29,9 +29,7 @@ func main() {
 	id := fmt.Sprintf("%v", u2)
 
 	// 获取端口和ip地址
-	err := register.Register(config.Name, id, config.Host, config.Port, []string{
-		"upload-web", "golang", "web",
-	})
+	err := register.Register(config.Name, id, config.Host, config.Port, config.Tag)
 	if err != nil {
 		zap.S().Errorf("注册失败: %s", err)
 	}

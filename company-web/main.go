@@ -29,18 +29,12 @@ func main() {
 	id := fmt.Sprintf("%v", u2)
 
 	// 获取端口和ip地址
-	err := register.Register(config.Name, id, config.Host, config.Port, []string{
-		"company-web", "golang", "web",
-	})
+	err := register.Register(config.Name, id, config.Host, config.Port, config.Tag)
 	if err != nil {
 		zap.S().Errorf("注册失败: %s", err)
 	}
 
 	initial.InitialCon()
-	// 注册自定义表单验证
-	//if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-	//
-	//}
 
 	host := fmt.Sprintf("%s:%d", config.Host, config.Port)
 	zap.S().Debugf("server run in %s ", host)
