@@ -12,9 +12,12 @@ import (
 )
 
 func List(ctx *gin.Context) {
+
+	page, limit := utils.GetPage(ctx)
+
 	list, err := global.CompanyServCon.GetCompanyList(ctx, &proto.GetCompanyListRequest{
-		Page:  1,
-		Limit: 10,
+		Page:  page,
+		Limit: limit,
 	})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)

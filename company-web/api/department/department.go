@@ -21,7 +21,7 @@ func List(ctx *gin.Context) {
 		Page:      page,
 		Limit:     limit,
 		CompanyId: int64(companyId),
-		Search:    "",
+		Search:    nil,
 	})
 	if err != nil {
 		zap.S().Errorf("company service call err: %s", err.Error())

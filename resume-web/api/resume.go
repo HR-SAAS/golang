@@ -12,14 +12,16 @@ import (
 )
 
 func List(ctx *gin.Context) {
+	var search map[string]string
+
 	userId := ctx.GetInt64("userId")
+	search["user_id"] = strconv.FormatInt(userId, 10)
+
 	list, err := global.ResumeServCon.GetResumeList(ctx, &proto.GetResumeListRequest{
-		Page:  1,
-		Limit: 10,
-		Sort:  nil,
-		Search: map[string]string{
-			"user_id": strconv.FormatInt(userId, 10),
-		},
+		Page:   1,
+		Limit:  10,
+		Sort:   nil,
+		Search: search,
 	})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)

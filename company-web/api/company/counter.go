@@ -8,7 +8,7 @@ import (
 
 // 统计服务
 
-func UserCountByCompany(ctx *gin.Context) {
+func CompanyCount(ctx *gin.Context) {
 	// 用户统计
 	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]int{
 		"count": 1,
