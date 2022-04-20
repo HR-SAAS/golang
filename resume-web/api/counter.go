@@ -31,7 +31,7 @@ func Count(ctx *gin.Context) {
 		utils.HandleGrpcError(err, ctx)
 		return
 	}
-	ctx.JSON(http.StatusOK, map[string]int64{
+	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]int64{
 		"count": res.Count,
-	})
+	}))
 }

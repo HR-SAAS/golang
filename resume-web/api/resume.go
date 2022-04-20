@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"hr-saas-go/resume-web/global"
 	"hr-saas-go/resume-web/proto"
 	"hr-saas-go/resume-web/request"
@@ -12,24 +13,40 @@ import (
 )
 
 func List(ctx *gin.Context) {
-	var search map[string]string
+	search := make(map[string]string)
 
 	userId := ctx.GetInt64("userId")
 	search["user_id"] = strconv.FormatInt(userId, 10)
 
 	page, limit := utils.GetPage(ctx)
-
+	zap.S().Infof("%d,%d", page, limit)
 	list, err := global.ResumeServCon.GetResumeList(ctx, &proto.GetResumeListRequest{
 		Page:   page,
 		Limit:  limit,
-		Sort:   nil,
 		Search: search,
 	})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)
 		return
 	}
-	ctx.JSON(http.StatusOK, utils.SuccessJson(list))
+
+	resumes := make([]interface{}, 0, limit)
+	for _, v := range list.Data {
+		resumes = append(resumes, map[string]interface{}{
+			"id":         v.Id,
+			"name":       v.Name,
+			"tag":        v.Tag,
+			"type":       v.Type,
+			"status":     v.Status,
+			"post_count": v.PostCount,
+			"created_at": v.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
+			"updated_at": v.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
+		})
+	}
+	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
+		"data":  resumes,
+		"total": list.Total,
+	}))
 }
 
 func Show(ctx *gin.Context) {
@@ -47,7 +64,17 @@ func Show(ctx *gin.Context) {
 		utils.HandleGrpcError(err, ctx)
 		return
 	}
-	ctx.JSON(http.StatusOK, utils.SuccessJson(data))
+	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
+		"id":         data.Id,
+		"name":       data.Name,
+		"tag":        data.Tag,
+		"type":       data.Type,
+		"status":     data.Status,
+		"content":    data.Content,
+		"post_count": data.PostCount,
+		"created_at": data.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
+		"updated_at": data.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
+	}))
 	return
 }
 
@@ -90,6 +117,7 @@ func Update(ctx *gin.Context) {
 		return
 	}
 	_, err = global.ResumeServCon.UpdateResume(ctx, &proto.UpdateResumeRequest{
+		Id:      int64(id),
 		UserId:  userId,
 		Name:    req.Name,
 		Type:    req.Type,

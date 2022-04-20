@@ -9,7 +9,6 @@ import (
 )
 
 type ResumeSaveRequest struct {
-	UserId  int64    `json:"user_id" form:"user_id" binding:"required"`
 	Name    string   `json:"name" form:"name" binding:""`
 	Type    int32    `json:"type" form:"type" binding:"required"`
 	Tag     []string `json:"tag" form:"tag" binding:""`

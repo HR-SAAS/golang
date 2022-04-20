@@ -14,7 +14,7 @@ func GetPage(ctx *gin.Context) (page, limit int32) {
 	}
 
 	if l, _ := strconv.Atoi(ctx.Query("limit")); l > 0 {
-		page = int32(l)
+		limit = int32(l)
 	}
 	return
 }
