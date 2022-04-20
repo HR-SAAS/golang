@@ -38,6 +38,7 @@ func List(ctx *gin.Context) {
 			"tag":        v.Tag,
 			"type":       v.Type,
 			"status":     v.Status,
+			"content":    v.Content,
 			"post_count": v.PostCount,
 			"created_at": v.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
 			"updated_at": v.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
