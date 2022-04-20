@@ -30,14 +30,14 @@ func initResume() {
 		fmt.Sprintf("consul://%s:%d/%s?wait=14s&tag=python",
 			global.Config.ConsulConfig.Host,
 			global.Config.ConsulConfig.Port,
-			global.Config.ResumeSrvInfo.Name),
+			global.Config.UserMessageSrv.Name),
 		grpc.WithInsecure(),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 	)
 	if err != nil {
 		panic(err)
 	}
-	global.ResumeServCon = proto.NewResumeClient(con)
+	global.UserMessageServCon = proto.NewUserMessageClient(con)
 	// 统计服务
-	global.ResumeCountServCon = proto.NewResumeCounterServiceClient(con)
+	global.MessageCounterService = proto.NewMessageCounterClient(con)
 }

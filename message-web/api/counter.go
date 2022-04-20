@@ -12,19 +12,13 @@ import (
 func Count(ctx *gin.Context) {
 	// 统计服务
 	userId := ctx.GetInt64("userId")
-
-	t, err := strconv.Atoi(ctx.Query("type"))
-	if err != nil {
-		t = -1
-	}
 	status, err := strconv.Atoi(ctx.Query("status"))
 	if err != nil {
 		status = -1
 	}
-	res, err := global.ResumeCountServCon.CountResume(ctx, &proto.CountResumeRequest{
+	res, err := global.MessageCounterService.CountUserMessage(ctx, &proto.CountUserMessageRequest{
 		UserId: userId,
-		Name:   ctx.Query("name"),
-		Type:   int32(t),
+		Search: map[string]string{},
 		Status: int32(status),
 	})
 	if err != nil {

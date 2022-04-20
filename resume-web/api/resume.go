@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"hr-saas-go/resume-web/global"
 	"hr-saas-go/resume-web/proto"
 	"hr-saas-go/resume-web/request"
@@ -19,7 +18,6 @@ func List(ctx *gin.Context) {
 	search["user_id"] = strconv.FormatInt(userId, 10)
 
 	page, limit := utils.GetPage(ctx)
-	zap.S().Infof("%d,%d", page, limit)
 	list, err := global.ResumeServCon.GetResumeList(ctx, &proto.GetResumeListRequest{
 		Page:   page,
 		Limit:  limit,

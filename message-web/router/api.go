@@ -13,7 +13,7 @@ func InitCompanyRouter(group *gin.RouterGroup) {
 		companyRouter.GET("/", api.List)
 		companyRouter.GET("/count", api.Count)
 		companyRouter.GET("/:id", api.Show)
-		companyRouter.POST("/", api.Create)
+		companyRouter.POST("/send", api.SendTo)
 		companyRouter.PUT("/:id", api.Update)
 		companyRouter.DELETE("/:id", api.Delete)
 	}

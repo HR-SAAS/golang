@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"hr-saas-go/message-web/global"
 	"hr-saas-go/message-web/proto"
 	"hr-saas-go/message-web/request"
@@ -19,8 +18,7 @@ func List(ctx *gin.Context) {
 	search["user_id"] = strconv.FormatInt(userId, 10)
 
 	page, limit := utils.GetPage(ctx)
-	zap.S().Infof("%d,%d", page, limit)
-	list, err := global.ResumeServCon.GetResumeList(ctx, &proto.GetResumeListRequest{
+	list, err := global.UserMessageServCon.GetMessageList(ctx, &proto.GetMessageListRequest{
 		Page:   page,
 		Limit:  limit,
 		Search: search,
@@ -29,20 +27,25 @@ func List(ctx *gin.Context) {
 		utils.HandleGrpcError(err, ctx)
 		return
 	}
-
 	resumes := make([]interface{}, 0, limit)
 	for _, v := range list.Data {
-		resumes = append(resumes, map[string]interface{}{
-			"id":         v.Id,
-			"name":       v.Name,
-			"tag":        v.Tag,
-			"type":       v.Type,
-			"status":     v.Status,
-			"content":    v.Content,
-			"post_count": v.PostCount,
-			"created_at": v.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
-			"updated_at": v.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
-		})
+		resumes = append(
+			resumes,
+			map[string]interface{}{
+				"id":            v.Id,
+				"type":          v.Type,
+				"source_type":   v.SourceType,
+				"source_id":     v.SourceId,
+				"is_read":       v.IsRead,
+				"relation_id":   v.RelationId,
+				"relation_type": v.RelationType,
+				"user_id":       v.UserId,
+				"status":        v.Status,
+				"content":       v.Content,
+				"created_at":    v.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
+				"updated_at":    v.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
+			},
+		)
 	}
 	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
 		"data":  resumes,
@@ -58,7 +61,7 @@ func Show(ctx *gin.Context) {
 	}
 	// police
 
-	data, err := global.ResumeServCon.GetResumeDetail(ctx, &proto.GetResumeDetailRequest{
+	data, err := global.UserMessageServCon.GetMessageDetail(ctx, &proto.GetMessageDetailRequest{
 		Id: int64(id),
 	})
 	if err != nil {
@@ -66,34 +69,41 @@ func Show(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
-		"id":         data.Id,
-		"name":       data.Name,
-		"tag":        data.Tag,
-		"type":       data.Type,
-		"status":     data.Status,
-		"content":    data.Content,
-		"post_count": data.PostCount,
-		"created_at": data.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
-		"updated_at": data.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
+		"id":            data.Id,
+		"type":          data.Type,
+		"source_type":   data.SourceType,
+		"source_id":     data.SourceId,
+		"is_read":       data.IsRead,
+		"relation_id":   data.RelationId,
+		"relation_type": data.RelationType,
+		"user_id":       data.UserId,
+		"status":        data.Status,
+		"content":       data.Content,
+		"created_at":    data.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
+		"updated_at":    data.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
 	}))
 	return
 }
 
-func Create(ctx *gin.Context) {
+func SendTo(ctx *gin.Context) {
 	req, err := request.ResumeSaveRequestGet(ctx)
 	if err != nil {
 		return
 	}
 	userId := ctx.GetInt64("userId")
-	res, err := global.ResumeServCon.CreateResume(
-		context.Background(), &proto.CreateResumeRequest{
-			UserId:  userId,
-			Name:    req.Name,
-			Type:    req.Type,
-			Tag:     req.Tag,
-			Content: req.Content,
-			Status:  req.Status,
-		})
+	res, err := global.UserMessageServCon.CreateMessage(
+		context.Background(), &proto.CreateMessageRequest{
+			Id:           0,
+			UserId:       0,
+			SourceType:   "user",
+			SourceId:     userId,
+			Content:      req.Content,
+			IsRead:       false,
+			Status:       0,
+			RelationId:   0,
+			RelationType: "",
+		},
+	)
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)
 		return
@@ -108,23 +118,27 @@ func Update(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, utils.ErrorJson("id错误"))
 		return
 	}
+
+	//todo 权限控制
 	req, err := request.ResumeSaveRequestGet(ctx)
 	if err != nil {
 		return
 	}
-	userId := ctx.GetInt64("userId")
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("系统错误"))
 		return
 	}
-	_, err = global.ResumeServCon.UpdateResume(ctx, &proto.UpdateResumeRequest{
-		Id:      int64(id),
-		UserId:  userId,
-		Name:    req.Name,
-		Type:    req.Type,
-		Tag:     req.Tag,
-		Content: req.Content,
-		Status:  req.Status,
+	_, err = global.UserMessageServCon.UpdateMessage(ctx, &proto.UpdateMessageRequest{
+		Id:           int64(id),
+		UserId:       0,
+		SourceType:   "",
+		SourceId:     0,
+		Type:         "",
+		Content:      req.Content,
+		IsRead:       false,
+		Status:       req.Status,
+		RelationId:   0,
+		RelationType: "",
 	})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)
@@ -141,7 +155,7 @@ func Delete(ctx *gin.Context) {
 		return
 	}
 
-	data, err := global.ResumeServCon.DeleteResume(ctx, &proto.DeleteResumeRequest{
+	data, err := global.UserMessageServCon.DeleteMessage(ctx, &proto.DeleteMessageRequest{
 		Id: int64(id),
 	})
 	if err != nil {

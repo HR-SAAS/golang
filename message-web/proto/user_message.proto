@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+option go_package = '../proto';
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+service UserMessage{
+  // 获取消息列表
+  rpc GetMessageList(GetMessageListRequest) returns (MessageListResponse);
+
+  // 创建消息
+  rpc CreateMessage(CreateMessageRequest) returns (MessageResponse);
+
+  // 更新消息
+  rpc UpdateMessage(UpdateMessageRequest) returns (google.protobuf.Empty);
+
+  // 删除消息
+  rpc DeleteMessage(DeleteMessageRequest) returns(google.protobuf.Empty);
+
+  //消息详情
+  rpc GetMessageDetail(GetMessageDetailRequest) returns (MessageResponse);
+}
+
+
+message GetMessageDetailRequest{
+  int64 id = 1;
+}
+
+message MessageResponse{
+  int64 id = 1;
+  int64 user_id = 2;
+  string source_type = 3;
+  int64 source_id = 4;
+  string type = 5;
+  string content = 6;
+  bool is_read = 7;
+  int32 status = 8;
+
+  int64 relation_id = 9;
+  string relation_type=10;
+
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp updated_at = 12;
+}
+
+
+message GetMessageListRequest{
+  int32 page = 2;
+  int32 limit = 3;
+  map<string, string> sort = 4;
+  map<string, string> search = 5;
+}
+
+message MessageListResponse{
+  repeated MessageResponse data = 1;
+  int32 total = 2;
+}
+
+message CreateMessageRequest{
+  int64 id = 1;
+  int64 user_id = 2;
+  string source_type = 3;
+  int64 source_id = 4;
+  string type = 5;
+  string content = 6;
+  bool is_read = 7;
+  int32 status = 8;
+
+  int64 relation_id = 9;
+  string relation_type=10;
+}
+
+message UpdateMessageRequest{
+  int64 id = 1;
+  int64 user_id = 2;
+  string source_type = 3;
+  int64 source_id = 4;
+  string type = 5;
+  string content = 6;
+  bool is_read = 7;
+  int32 status = 8;
+
+  int64 relation_id = 9;
+  string relation_type=10;
+}
+
+message DeleteMessageRequest{
+  int64 id = 1;
+}

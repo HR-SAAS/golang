@@ -2,19 +2,16 @@ syntax = "proto3";
 
 option go_package = '../proto';
 
-service ResumeCounterService{
-  // 统计简历
-  rpc CountResume(CountResumeRequest) returns(CountResumeResponse);
+service MessageCounter{
+  rpc CountUserMessage(CountUserMessageRequest) returns(CountUserMessageResponse);
 }
 
-
-message CountResumeRequest{
+message CountUserMessageRequest{
   int64 user_id = 1;
-  string name = 2;
-  int32 type = 3;
-  int32 status = 4;
+  map<string, string> search = 2;
+  int32 status = 3;
 }
 
-message CountResumeResponse{
+message CountUserMessageResponse{
   int64 count = 1;
 }
