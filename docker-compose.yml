@@ -69,3 +69,19 @@ services:
       NACOS_NAMESPACE: "${RESUME_NACOS_NAMESPACE}"
     volumes:
       - ./resume-web/config-debug.yml:/app/config-debug.yml
+
+  message-web:
+    build:
+      context: ./message-web
+    environment:
+      DEBUG: "true"
+      GIN_MODE: "debug"
+      NACOS_HOST: "${NACOS_HOST}"
+      NACOS_PORT: "${NACOS_PORT}"
+      NACOS_USERNAME: "${NACOS_USERNAME}"
+      NACOS_PASSWORD: "${NACOS_PASSWORD}"
+      NACOS_DATA_ID: "${MESSAGE_NACOS_DATA_ID}"
+      NACOS_GROUP: "${MESSAGE_NACOS_GROUP}"
+      NACOS_NAMESPACE: "${MESSAGE_NACOS_NAMESPACE}"
+    volumes:
+      - ./message-web/config-debug.yml:/app/config-debug.yml

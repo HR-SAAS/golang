@@ -17,6 +17,7 @@ type DepartmentSaveRequest struct {
 	Remark    string ` form:"remark" binding:"" json:"remark"`
 	Desc      string ` form:"desc" binding:"" json:"desc"`
 	Info      string ` form:"info" binding:"" json:"info"`
+	Size      int32  ` form:"size" json:"size"`
 	Status    int32  ` form:"status" json:"status"`
 }
 

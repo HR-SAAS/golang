@@ -16,9 +16,13 @@ func Count(ctx *gin.Context) {
 	if err != nil {
 		status = -1
 	}
+	search := make(map[string]string)
+	if content := ctx.GetString("content"); content != "" {
+		search["content"] = content
+	}
 	res, err := global.MessageCounterService.CountUserMessage(ctx, &proto.CountUserMessageRequest{
 		UserId: userId,
-		Search: map[string]string{},
+		Search: search,
 		Status: int32(status),
 	})
 	if err != nil {

@@ -47,7 +47,7 @@ func uploadToAliOss(file *multipart.FileHeader, path string) (string, error) {
 		os.Exit(-1)
 	}
 
-	// 填写存储空间名称，例如examplebucket。
+	// 填写存储空间名称，例如exampleBucket。
 	bucket, err := client.Bucket(global.Config.OssConfig.Bucket)
 	if err != nil {
 		return "", err
@@ -64,12 +64,12 @@ func uploadToAliOss(file *multipart.FileHeader, path string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	tagetFileName := path + filename
-	err = bucket.PutObject(tagetFileName, src)
+	targetFileName := path + filename
+	err = bucket.PutObject(targetFileName, src)
 	if err != nil {
 		return "", err
 	}
-	return fmt.Sprintf("//%s.%s/%s", global.Config.OssConfig.Bucket, global.Config.OssConfig.Endpoint, tagetFileName), nil
+	return fmt.Sprintf("//%s.%s/%s", global.Config.OssConfig.Bucket, global.Config.OssConfig.Endpoint, targetFileName), nil
 }
 
 func makeFilename(file *multipart.FileHeader) (string, error) {

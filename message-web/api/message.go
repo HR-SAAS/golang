@@ -148,6 +148,11 @@ func Update(ctx *gin.Context) {
 	return
 }
 
+func BatchRead(ctx *gin.Context) {
+	// 批量已读
+
+}
+
 func Delete(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 	if id == 0 {

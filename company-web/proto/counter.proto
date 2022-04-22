@@ -2,7 +2,6 @@ syntax = 'proto3';
 
 option go_package = '../proto';
 
-
 service CompanyCounter{
   // -----------------------统计服务---
   // 统计一共多少个公司

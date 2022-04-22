@@ -65,6 +65,7 @@ func GetInfo(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
+		"id":           user.Id,
 		"name":         user.Name,
 		"nick_name":    user.NickName,
 		"mobile":       user.Mobile,

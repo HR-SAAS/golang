@@ -1,6 +1,6 @@
 package config
 
-type UserMessageSrv struct {
+type MessageSrv struct {
 	Name string `mapstructure:"name" json:"name"`
 }
 
@@ -22,7 +22,7 @@ type ServerConfig struct {
 	Port           int              `mapstructure:"port" json:"port"`
 	Name           string           `mapstructure:"name" json:"name"`
 	Tag            []string         `mapstructure:"tag" json:"tag"`
-	UserMessageSrv UserMessageSrv   `mapstructure:"user_message_srv" json:"user_message_srv"`
+	MessageSrv     MessageSrv       `mapstructure:"message_srv" json:"message_srv"`
 	CompanySrvInfo CompanySrvConfig `mapstructure:"company_srv" json:"company_srv"`
 	Local          string           `mapstructure:"local" json:"local"`
 	JwtConfig      JwtConfig        `mapstructure:"jwt_config" json:"jwt_config"`

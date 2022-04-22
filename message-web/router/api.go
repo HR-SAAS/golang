@@ -8,7 +8,7 @@ import (
 )
 
 func InitCompanyRouter(group *gin.RouterGroup) {
-	companyRouter := group.Group("/resume").Use(middleware.JWTAuth())
+	companyRouter := group.Group("/message").Use(middleware.JWTAuth())
 	{
 		companyRouter.GET("/", api.List)
 		companyRouter.GET("/count", api.Count)

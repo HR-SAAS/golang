@@ -3,12 +3,12 @@ package request
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"hr-saas-go/resume-web/global"
-	"hr-saas-go/resume-web/utils"
+	"hr-saas-go/recruit-web/global"
+	"hr-saas-go/recruit-web/utils"
 	"net/http"
 )
 
-type ResumeSaveRequest struct {
+type UserPostSaveRequest struct {
 	Name    string   `json:"name" form:"name" binding:""`
 	Type    string   `json:"type" form:"type" binding:"required"`
 	Tag     []string `json:"tag" form:"tag" binding:""`
@@ -16,8 +16,8 @@ type ResumeSaveRequest struct {
 	Status  int32    `json:"status" form:"status" binding:"oneof=0 1"`
 }
 
-func ResumeSaveRequestGet(c *gin.Context) (ResumeSaveRequest, error) {
-	var request ResumeSaveRequest
+func UserPostSaveRequestGet(c *gin.Context) (UserPostSaveRequest, error) {
+	var request UserPostSaveRequest
 	if err := c.ShouldBind(&request); err != nil {
 		e, ok := err.(validator.ValidationErrors)
 		if ok {

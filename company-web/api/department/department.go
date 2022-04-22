@@ -14,7 +14,7 @@ import (
 func List(ctx *gin.Context) {
 	companyId, _ := strconv.Atoi(ctx.Query("company_id"))
 	if companyId == 0 {
-		ctx.JSON(http.StatusOK, utils.ErrorJson("错误到company_id"))
+		ctx.JSON(http.StatusOK, utils.ErrorJson("错误的company_id"))
 	}
 	page, limit := utils.GetPage(ctx)
 	var list, err = global.DepartmentServCon.GetDepartmentList(ctx, &proto.GetDepartmentListRequest{
@@ -65,6 +65,7 @@ func Create(ctx *gin.Context) {
 		Desc:      req.Desc,
 		Info:      req.Info,
 		CreatorId: userId,
+		Size:      req.Size,
 		Status:    1,
 	})
 	if err != nil {
@@ -96,6 +97,7 @@ func Update(ctx *gin.Context) {
 		Desc:      req.Desc,
 		Info:      req.Info,
 		CreatorId: userId,
+		Size:      req.Size,
 		Status:    req.Status,
 	})
 	if err != nil {
