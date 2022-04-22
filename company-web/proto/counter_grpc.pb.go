@@ -22,7 +22,6 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CompanyCounterClient interface {
-	// -----------------------统计服务---
 	// 统计一共多少个公司
 	CountCompany(ctx context.Context, in *CountCompanyRequest, opts ...grpc.CallOption) (*CompanyCountResponse, error)
 	// 统计某公司多少人
@@ -81,7 +80,6 @@ func (c *companyCounterClient) CountDepartmentUser(ctx context.Context, in *Coun
 // All implementations must embed UnimplementedCompanyCounterServer
 // for forward compatibility
 type CompanyCounterServer interface {
-	// -----------------------统计服务---
 	// 统计一共多少个公司
 	CountCompany(context.Context, *CountCompanyRequest) (*CompanyCountResponse, error)
 	// 统计某公司多少人
