@@ -85,3 +85,19 @@ services:
       NACOS_NAMESPACE: "${MESSAGE_NACOS_NAMESPACE}"
     volumes:
       - ./message-web/config-debug.yml:/app/config-debug.yml
+
+  recruit-web:
+    build:
+      context: ./recruit-web
+    environment:
+      DEBUG: "true"
+      GIN_MODE: "debug"
+      NACOS_HOST: "${NACOS_HOST}"
+      NACOS_PORT: "${NACOS_PORT}"
+      NACOS_USERNAME: "${NACOS_USERNAME}"
+      NACOS_PASSWORD: "${NACOS_PASSWORD}"
+      NACOS_DATA_ID: "${RECRUIT_NACOS_DATA_ID}"
+      NACOS_GROUP: "${RECRUIT_NACOS_GROUP}"
+      NACOS_NAMESPACE: "${RECRUIT_NACOS_NAMESPACE}"
+    volumes:
+      - ./recruit-web/config-debug.yml:/app/config-debug.yml

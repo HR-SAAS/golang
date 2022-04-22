@@ -144,7 +144,7 @@ func Delete(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("id不正确"))
 		return
 	}
-
+	// 修改状态为取消投递 -1
 	data, err := global.PostServCon.DeletePost(ctx, &proto.DeletePostRequest{
 		Id: int64(id),
 	})
