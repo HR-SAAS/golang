@@ -60,6 +60,13 @@ func Show(ctx *gin.Context) {
 		utils.HandleGrpcError(err, ctx)
 		return
 	}
+
+	// 获取company
+
+	// 获取department
+
+	// 获取creator_id
+
 	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
 		"id":         data.Id,
 		"name":       data.Name,
@@ -77,20 +84,32 @@ func Create(ctx *gin.Context) {
 		return
 	}
 	userId := ctx.GetInt64("userId")
+
+	startAt, err := utils.FormatTimeToStampPb(req.StartAt)
+	if err != nil {
+		ctx.JSON(http.StatusOK, utils.ErrorJson("时间错误"))
+		return
+	}
+
+	endAt, err := utils.FormatTimeToStampPb(req.EndAt)
+	if err != nil {
+		ctx.JSON(http.StatusOK, utils.ErrorJson("时间错误"))
+		return
+	}
 	res, err := global.PostServCon.CreatePost(
 		context.Background(), &proto.CreatePostRequest{
-			CompanyId:    0,
-			DepartmentId: 0,
+			CompanyId:    req.CompanyId,
+			DepartmentId: req.DepartmentId,
 			CreatorId:    userId,
-			Type:         0,
+			Type:         req.Type,
 			Name:         req.Name,
-			Desc:         "",
+			Desc:         req.Desc,
 			Content:      req.Content,
-			Experience:   0,
-			Education:    0,
-			Address:      "",
-			StartAt:      nil,
-			EndAt:        nil,
+			Experience:   req.Experience,
+			Education:    req.Education,
+			Address:      req.Address,
+			StartAt:      startAt,
+			EndAt:        endAt,
 		})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)
@@ -115,20 +134,31 @@ func Update(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("系统错误"))
 		return
 	}
+	startAt, err := utils.FormatTimeToStampPb(req.StartAt)
+	if err != nil {
+		ctx.JSON(http.StatusOK, utils.ErrorJson("时间错误"))
+		return
+	}
+
+	endAt, err := utils.FormatTimeToStampPb(req.EndAt)
+	if err != nil {
+		ctx.JSON(http.StatusOK, utils.ErrorJson("时间错误"))
+		return
+	}
 	_, err = global.PostServCon.UpdatePost(ctx, &proto.UpdatePostRequest{
 		Id:           int64(id),
 		CompanyId:    req.CompanyId,
-		DepartmentId: 0,
+		DepartmentId: req.DepartmentId,
 		CreatorId:    userId,
-		Type:         0,
-		Name:         "",
-		Desc:         "",
-		Content:      "",
-		Experience:   0,
-		Education:    0,
-		Address:      "",
-		StartAt:      nil,
-		EndAt:        nil,
+		Type:         req.Type,
+		Name:         req.Name,
+		Desc:         req.Desc,
+		Content:      req.Content,
+		Experience:   req.Experience,
+		Education:    req.Education,
+		Address:      req.Address,
+		StartAt:      startAt,
+		EndAt:        endAt,
 	})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)

@@ -80,16 +80,16 @@ func Create(ctx *gin.Context) {
 	userId := ctx.GetInt64("userId")
 	res, err := global.UserPostServCon.CreateUserPost(
 		context.Background(), &proto.CreateUserPostRequest{
-			PostId:     0,
+			PostId:     req.PostId,
 			UserId:     userId,
-			ResumeId:   0,
-			ResumeType: "",
-			ResumeName: "",
-			Resume:     "",
-			ReviewId:   0,
+			ResumeId:   req.ResumeId,
+			ResumeType: req.ResumeType,
+			ResumeName: req.ResumeName,
+			Resume:     req.Resume,
+			ReviewId:   req.ReviewId,
 			Status:     req.Status,
-			CompanyId:  0,
-			Remark:     "",
+			CompanyId:  req.CompanyId,
+			Remark:     req.Remark,
 		})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)
@@ -99,7 +99,7 @@ func Create(ctx *gin.Context) {
 	return
 }
 
-// 更新状态
+// Update 更新状态
 func Update(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 	if id == 0 {
@@ -116,17 +116,11 @@ func Update(ctx *gin.Context) {
 		return
 	}
 	_, err = global.UserPostServCon.UpdateUserPost(ctx, &proto.UpdateUserPostRequest{
-		Id:         int64(id),
-		PostId:     0,
-		UserId:     userId,
-		ResumeId:   0,
-		ResumeType: "",
-		ResumeName: "",
-		Resume:     "",
-		ReviewId:   0,
-		Status:     req.Status,
-		CompanyId:  0,
-		Remark:     "",
+		ReviewId:  userId,
+		Status:    req.Status,
+		CompanyId: req.CompanyId,
+		Remark:    req.Remark,
+		// 添加审核ID
 	})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)
@@ -152,18 +146,11 @@ func BatchHandle(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, utils.ErrorJson("系统错误"))
 		return
 	}
-	_, err = global.UserPostServCon.UpdateUserPost(ctx, &proto.UpdateUserPostRequest{
-		Id:         int64(id),
-		PostId:     0,
-		UserId:     userId,
-		ResumeId:   0,
-		ResumeType: "",
-		ResumeName: "",
-		Resume:     "",
-		ReviewId:   0,
-		Status:     req.Status,
-		CompanyId:  0,
-		Remark:     "",
+	_, err = global.UserPostServCon.BatchUpdateUserPost(ctx, &proto.BatchUpdateUserPostRequest{
+		Ids:      []int64{1},
+		ReviewId: userId,
+		Status:   req.Status,
+		Remark:   req.Remark,
 	})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)
@@ -173,7 +160,7 @@ func BatchHandle(ctx *gin.Context) {
 	return
 }
 
-// Delete 取消投递
+// Delete 删除投递记录
 func Delete(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 	if id == 0 {

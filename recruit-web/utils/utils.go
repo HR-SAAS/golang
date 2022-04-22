@@ -6,8 +6,10 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"net/http"
 	"strings"
+	"time"
 )
 
 type Register interface {
@@ -64,4 +66,12 @@ func HandleGrpcError(err error, ctx *gin.Context, errMsgs ...string) {
 			ctx.JSON(http.StatusOK, MakeTrans(1, errMsgArr[3], nil))
 		}
 	}
+}
+
+func FormatTimeToStampPb(input string) (*timestamppb.Timestamp, error) {
+	if input == "" {
+		return nil, nil
+	}
+	res, err := time.Parse("2006-01-02 15:04:05", input)
+	return timestamppb.New(res), err
 }

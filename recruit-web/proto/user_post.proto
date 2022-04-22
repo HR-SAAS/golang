@@ -31,7 +31,7 @@ message GetUserPostDetailRequest{
 }
 
 message BatchUpdateUserPostRequest{
-  repeated int64 id = 1;
+  repeated int64 ids = 1;
   string remark = 2;
   int64 review_id = 3;
   int32 status = 4;

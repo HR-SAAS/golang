@@ -9,11 +9,15 @@ import (
 )
 
 type UserPostSaveRequest struct {
-	Name    string   `json:"name" form:"name" binding:""`
-	Type    string   `json:"type" form:"type" binding:"required"`
-	Tag     []string `json:"tag" form:"tag" binding:""`
-	Content string   `json:"content" form:"content" binding:"required"`
-	Status  int32    `json:"status" form:"status" binding:"oneof=0 1"`
+	PostId     int64  ` json:"post_id" form:"post_id" binding:""`
+	ResumeId   int64  ` json:"resume_id" form:"resume_id" binding:""`
+	ResumeType string ` json:"resume_type" form:"resume_type" binding:""`
+	ResumeName string ` json:"resume_name" form:"resume_name" binding:""`
+	Resume     string ` json:"resume" form:"resume" binding:""`
+	ReviewId   int64  ` json:"review_id" form:"review_id" binding:""`
+	Status     int32  ` json:"status" form:"status" binding:""`
+	CompanyId  int64  ` json:"company_id" form:"company_id" binding:""`
+	Remark     string ` json:"remark" form:"remark" binding:""`
 }
 
 func UserPostSaveRequestGet(c *gin.Context) (UserPostSaveRequest, error) {

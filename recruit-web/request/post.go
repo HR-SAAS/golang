@@ -9,12 +9,18 @@ import (
 )
 
 type PostSaveRequest struct {
-	Name      string   `json:"name" form:"name" binding:""`
-	Type      string   `json:"type" form:"type" binding:"required"`
-	Tag       []string `json:"tag" form:"tag" binding:""`
-	Content   string   `json:"content" form:"content" binding:"required"`
-	Status    int32    `json:"status" form:"status" binding:"oneof=0 1"`
-	CompanyId int64    `json:"company_id" form:"company_id"`
+	CompanyId    int64  ` json:"company_id" form:"company_id" bindgin:""`
+	DepartmentId int64  ` json:"department_id" form:"department_id" bindgin:""`
+	CreatorId    int64  ` json:"creator_id," form:"creator_id," bindgin:""`
+	Type         int32  ` json:"type" form:"type" bindgin:""`
+	Name         string ` json:"name" form:"name" bindgin:""`
+	Desc         string ` json:"desc" form:"desc" bindgin:""`
+	Content      string ` json:"content" form:"content" bindgin:""`
+	Experience   int32  ` json:"experience" form:"experience" bindgin:""`
+	Education    int32  ` json:"education" form:"education" bindgin:""`
+	Address      string ` json:"address" form:"address" bindgin:""`
+	StartAt      string ` json:"start_at" form:"start_at" bindgin:""`
+	EndAt        string ` json:"end_at" form:"end_at" bindgin:""`
 }
 
 func PostSaveRequestGet(c *gin.Context) (PostSaveRequest, error) {
