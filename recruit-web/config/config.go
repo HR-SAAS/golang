@@ -4,6 +4,10 @@ type RecruitSrvInfo struct {
 	Name string `mapstructure:"name" json:"name"`
 }
 
+type UserSrvConfig struct {
+	Name string `mapstructure:"name" json:"name"`
+}
+
 type CompanyServConfig struct {
 	Name string `mapstructure:"name" json:"name"`
 }
@@ -24,6 +28,7 @@ type ServerConfig struct {
 	Tag            []string          `mapstructure:"tag" json:"tag"`
 	RecruitSrvInfo RecruitSrvInfo    `mapstructure:"recruit_srv" json:"recruit_srv"`
 	CompanySrvInfo CompanyServConfig `mapstructure:"company_srv" json:"company_srv"`
+	UserSrvInfo    UserSrvConfig     `mapstructure:"user_srv" json:"user_srv"`
 	Local          string            `mapstructure:"local" json:"local"`
 	JwtConfig      JwtConfig         `mapstructure:"jwt_config" json:"jwt_config"`
 	ConsulConfig   ConsulConfig      `mapstructure:"consul" json:"consul"`

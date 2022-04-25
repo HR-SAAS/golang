@@ -14,6 +14,7 @@ var (
 	UserPostServCon              proto.UserPostClient
 	CompanyServCon               proto.CompanyClient
 	DepartmentServCon            proto.DepartmentClient
+	UserServCon                  proto.UserClient
 	PostServCon                  proto.PostClient
 	Debug                        bool
 )

@@ -44,9 +44,16 @@ func List(field string) func(ctx *gin.Context) {
 		res := make([]interface{}, 0, limit)
 
 		// 获取其他信息
+		userIds := make([]int64, 0, limit)
 		postIds := make([]int64, 0, limit)
 		for _, v := range list.Data {
 			postIds = append(postIds, v.PostId)
+			userIds = append(userIds, v.UserId)
+		}
+		users, err := global.UserServCon.GetUserListByIds(ctx, &proto.GetUserListByIdsRequest{Ids: userIds})
+		if err != nil {
+			utils.HandleGrpcError(err, ctx)
+			return
 		}
 		posts, err := global.PostServCon.GetPostListByIds(ctx, &proto.GetPostListByIdsRequest{Ids: postIds})
 		if err != nil {
@@ -62,6 +69,10 @@ func List(field string) func(ctx *gin.Context) {
 			temp := v.(map[string]interface{})
 			data[temp["id"].(int64)] = v
 		}
+		userMap := make(map[int64]interface{})
+		for _, v := range users.Data {
+			userMap[v.Id] = v
+		}
 		for _, v := range list.Data {
 			res = append(res, map[string]interface{}{
 				"id":          v.Id,
@@ -71,6 +82,7 @@ func List(field string) func(ctx *gin.Context) {
 				"resume_id":   v.ResumeId,
 				"resume_type": v.ResumeType,
 				"resume_name": v.ResumeName,
+				"user":        userMap[v.UserId],
 				"resume":      v.Resume,
 				"review_id":   v.ReviewId,
 				"status":      v.Status,

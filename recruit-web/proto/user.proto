@@ -1,0 +1,86 @@
+syntax = "proto3";
+option go_package = "../proto";
+
+import "google/protobuf/empty.proto";
+
+service User {
+  // 获取用户列表
+  rpc GetUserList(PageInfo) returns (UserListResponse);
+  // 根据手机号查找用户
+  rpc FindUserByMobile(MobileRequest) returns(UserResponse);
+  // 根据id进行查找
+  rpc FindUserById(IdRequest) returns (UserResponse);
+  // 创建用户
+  rpc CreateUser(UserRequest) returns(UserResponse);
+  // 更新用户
+  rpc UpdateUser(UpdateUserRequest) returns(google.protobuf.Empty);
+  // 叫用用户密码
+  rpc CheckPassword(CheckPasswordRequest) returns(CheckPasswordResult);
+  // 根据id列表进行查找用户
+  rpc GetUserListByIds(GetUserListByIdsRequest)returns(UserListResponse);
+}
+
+message GetUserListByIdsRequest{
+  repeated int64 ids = 1;
+}
+
+message CheckPasswordRequest{
+  string password = 1;
+  string encrypt = 2;
+}
+
+message CheckPasswordResult{
+  bool result = 1;
+}
+
+message PageInfo{
+  int32 page = 1;
+  int32 limit = 2;
+}
+
+message IdRequest{
+  int64 id = 1;
+}
+
+message UserListResponse{
+  repeated UserResponse data = 1;
+  int32 total = 2;
+}
+
+message MobileRequest{
+  string mobile = 1;
+}
+
+message UserRequest{
+  string name = 2;
+  string mobile = 3;
+  string nick_name = 4;
+  string password = 5;
+  int32 sex = 6;
+  string avatar = 7;
+  int32 current_role = 8;
+}
+
+message UpdateUserRequest{
+  int64 id = 1;
+  string name = 2;
+  string mobile = 3;
+  string nick_name = 4;
+  string password = 5;
+  int32 sex = 6;
+  string avatar = 7;
+  int32 current_role = 8;
+}
+
+message UserResponse{
+  int64 id = 1;
+  string name = 2;
+  string mobile = 3;
+  string nick_name = 4;
+  string password = 5;
+  int32 sex = 6;
+  string avatar = 7;
+  int32 current_role = 8;
+}
+
+

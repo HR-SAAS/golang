@@ -24,6 +24,22 @@ func InitialCon() {
 
 	initRecruit()
 	initCompany()
+	initUser()
+}
+
+func initUser() {
+	con, err := grpc.Dial(
+		fmt.Sprintf("consul://%s:%d/%s?wait=14s&tag=python",
+			global.Config.ConsulConfig.Host,
+			global.Config.ConsulConfig.Port,
+			global.Config.UserSrvInfo.Name),
+		grpc.WithInsecure(),
+		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
+	)
+	if err != nil {
+		panic(err)
+	}
+	global.UserServCon = proto.NewUserClient(con)
 }
 
 func initCompany() {
