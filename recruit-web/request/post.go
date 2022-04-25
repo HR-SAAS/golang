@@ -9,18 +9,19 @@ import (
 )
 
 type PostSaveRequest struct {
-	CompanyId    int64  ` json:"company_id" form:"company_id" bindgin:""`
-	DepartmentId int64  ` json:"department_id" form:"department_id" bindgin:""`
-	CreatorId    int64  ` json:"creator_id," form:"creator_id," bindgin:""`
-	Type         int32  ` json:"type" form:"type" bindgin:""`
-	Name         string ` json:"name" form:"name" bindgin:""`
-	Desc         string ` json:"desc" form:"desc" bindgin:""`
-	Content      string ` json:"content" form:"content" bindgin:""`
-	Experience   int32  ` json:"experience" form:"experience" bindgin:""`
-	Education    int32  ` json:"education" form:"education" bindgin:""`
-	Address      string ` json:"address" form:"address" bindgin:""`
-	StartAt      string ` json:"start_at" form:"start_at" bindgin:""`
-	EndAt        string ` json:"end_at" form:"end_at" bindgin:""`
+	CompanyId    int64    ` json:"company_id" form:"company_id" bindging:""`
+	DepartmentId int64    ` json:"department_id" form:"department_id" bindging:""`
+	CreatorId    int64    ` json:"creator_id," form:"creator_id," bindging:""`
+	Type         int32    ` json:"type" form:"type" bindging:""`
+	Name         string   ` json:"name" form:"name" bindging:""`
+	Desc         string   ` json:"desc" form:"desc" bindging:""`
+	Content      string   ` json:"content" form:"content" bindging:""`
+	Experience   int32    ` json:"experience" form:"experience" bindging:""`
+	Education    int32    ` json:"education" form:"education" bindging:""`
+	Address      []string ` json:"address" form:"address" bindging:""`
+	StartAt      string   ` json:"start_at" form:"start_at" bindging:""`
+	EndAt        string   ` json:"end_at" form:"end_at" bindging:""`
+	Status       int32    ` json:"status" form:"status" bindging:""`
 }
 
 func PostSaveRequestGet(c *gin.Context) (PostSaveRequest, error) {

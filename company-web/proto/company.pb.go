@@ -22,6 +22,53 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type GetCompanyListByIdsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Ids []int64 `protobuf:"varint,1,rep,packed,name=ids,proto3" json:"ids,omitempty"`
+}
+
+func (x *GetCompanyListByIdsRequest) Reset() {
+	*x = GetCompanyListByIdsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_company_proto_msgTypes[0]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetCompanyListByIdsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCompanyListByIdsRequest) ProtoMessage() {}
+
+func (x *GetCompanyListByIdsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_company_proto_msgTypes[0]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCompanyListByIdsRequest.ProtoReflect.Descriptor instead.
+func (*GetCompanyListByIdsRequest) Descriptor() ([]byte, []int) {
+	return file_company_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *GetCompanyListByIdsRequest) GetIds() []int64 {
+	if x != nil {
+		return x.Ids
+	}
+	return nil
+}
+
 type UserCompanyResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -41,7 +88,7 @@ type UserCompanyResponse struct {
 func (x *UserCompanyResponse) Reset() {
 	*x = UserCompanyResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[0]
+		mi := &file_company_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -54,7 +101,7 @@ func (x *UserCompanyResponse) String() string {
 func (*UserCompanyResponse) ProtoMessage() {}
 
 func (x *UserCompanyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[0]
+	mi := &file_company_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -67,7 +114,7 @@ func (x *UserCompanyResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserCompanyResponse.ProtoReflect.Descriptor instead.
 func (*UserCompanyResponse) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{0}
+	return file_company_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *UserCompanyResponse) GetUserId() int64 {
@@ -145,7 +192,7 @@ type GetCompanyUserIdListResponse struct {
 func (x *GetCompanyUserIdListResponse) Reset() {
 	*x = GetCompanyUserIdListResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[1]
+		mi := &file_company_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -158,7 +205,7 @@ func (x *GetCompanyUserIdListResponse) String() string {
 func (*GetCompanyUserIdListResponse) ProtoMessage() {}
 
 func (x *GetCompanyUserIdListResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[1]
+	mi := &file_company_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -171,7 +218,7 @@ func (x *GetCompanyUserIdListResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCompanyUserIdListResponse.ProtoReflect.Descriptor instead.
 func (*GetCompanyUserIdListResponse) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{1}
+	return file_company_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetCompanyUserIdListResponse) GetData() []*UserCompanyResponse {
@@ -205,7 +252,7 @@ type SaveUserCompanyRequest struct {
 func (x *SaveUserCompanyRequest) Reset() {
 	*x = SaveUserCompanyRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[2]
+		mi := &file_company_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -218,7 +265,7 @@ func (x *SaveUserCompanyRequest) String() string {
 func (*SaveUserCompanyRequest) ProtoMessage() {}
 
 func (x *SaveUserCompanyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[2]
+	mi := &file_company_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -231,7 +278,7 @@ func (x *SaveUserCompanyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveUserCompanyRequest.ProtoReflect.Descriptor instead.
 func (*SaveUserCompanyRequest) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{2}
+	return file_company_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *SaveUserCompanyRequest) GetUserId() int64 {
@@ -295,7 +342,7 @@ type DeleteUserCompanyRequest struct {
 func (x *DeleteUserCompanyRequest) Reset() {
 	*x = DeleteUserCompanyRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[3]
+		mi := &file_company_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -308,7 +355,7 @@ func (x *DeleteUserCompanyRequest) String() string {
 func (*DeleteUserCompanyRequest) ProtoMessage() {}
 
 func (x *DeleteUserCompanyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[3]
+	mi := &file_company_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -321,7 +368,7 @@ func (x *DeleteUserCompanyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteUserCompanyRequest.ProtoReflect.Descriptor instead.
 func (*DeleteUserCompanyRequest) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{3}
+	return file_company_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *DeleteUserCompanyRequest) GetUserId() int64 {
@@ -352,7 +399,7 @@ type GetCompanyUserListRequest struct {
 func (x *GetCompanyUserListRequest) Reset() {
 	*x = GetCompanyUserListRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[4]
+		mi := &file_company_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -365,7 +412,7 @@ func (x *GetCompanyUserListRequest) String() string {
 func (*GetCompanyUserListRequest) ProtoMessage() {}
 
 func (x *GetCompanyUserListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[4]
+	mi := &file_company_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -378,7 +425,7 @@ func (x *GetCompanyUserListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCompanyUserListRequest.ProtoReflect.Descriptor instead.
 func (*GetCompanyUserListRequest) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{4}
+	return file_company_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GetCompanyUserListRequest) GetPage() int32 {
@@ -423,7 +470,7 @@ type GetMyCompanyListRequest struct {
 func (x *GetMyCompanyListRequest) Reset() {
 	*x = GetMyCompanyListRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[5]
+		mi := &file_company_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -436,7 +483,7 @@ func (x *GetMyCompanyListRequest) String() string {
 func (*GetMyCompanyListRequest) ProtoMessage() {}
 
 func (x *GetMyCompanyListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[5]
+	mi := &file_company_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -449,7 +496,7 @@ func (x *GetMyCompanyListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMyCompanyListRequest.ProtoReflect.Descriptor instead.
 func (*GetMyCompanyListRequest) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{5}
+	return file_company_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetMyCompanyListRequest) GetPage() int32 {
@@ -491,7 +538,7 @@ type GetCompanyDetailRequest struct {
 func (x *GetCompanyDetailRequest) Reset() {
 	*x = GetCompanyDetailRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[6]
+		mi := &file_company_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -504,7 +551,7 @@ func (x *GetCompanyDetailRequest) String() string {
 func (*GetCompanyDetailRequest) ProtoMessage() {}
 
 func (x *GetCompanyDetailRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[6]
+	mi := &file_company_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -517,7 +564,7 @@ func (x *GetCompanyDetailRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCompanyDetailRequest.ProtoReflect.Descriptor instead.
 func (*GetCompanyDetailRequest) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{6}
+	return file_company_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetCompanyDetailRequest) GetId() int64 {
@@ -541,7 +588,7 @@ type GetCompanyListRequest struct {
 func (x *GetCompanyListRequest) Reset() {
 	*x = GetCompanyListRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[7]
+		mi := &file_company_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -554,7 +601,7 @@ func (x *GetCompanyListRequest) String() string {
 func (*GetCompanyListRequest) ProtoMessage() {}
 
 func (x *GetCompanyListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[7]
+	mi := &file_company_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -567,7 +614,7 @@ func (x *GetCompanyListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCompanyListRequest.ProtoReflect.Descriptor instead.
 func (*GetCompanyListRequest) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{7}
+	return file_company_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetCompanyListRequest) GetPage() int32 {
@@ -610,7 +657,7 @@ type CompanyListResponse struct {
 func (x *CompanyListResponse) Reset() {
 	*x = CompanyListResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[8]
+		mi := &file_company_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -623,7 +670,7 @@ func (x *CompanyListResponse) String() string {
 func (*CompanyListResponse) ProtoMessage() {}
 
 func (x *CompanyListResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[8]
+	mi := &file_company_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -636,7 +683,7 @@ func (x *CompanyListResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CompanyListResponse.ProtoReflect.Descriptor instead.
 func (*CompanyListResponse) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{8}
+	return file_company_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *CompanyListResponse) GetData() []*CompanyResponse {
@@ -664,7 +711,7 @@ type DeleteCompanyRequest struct {
 func (x *DeleteCompanyRequest) Reset() {
 	*x = DeleteCompanyRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[9]
+		mi := &file_company_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -677,7 +724,7 @@ func (x *DeleteCompanyRequest) String() string {
 func (*DeleteCompanyRequest) ProtoMessage() {}
 
 func (x *DeleteCompanyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[9]
+	mi := &file_company_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -690,7 +737,7 @@ func (x *DeleteCompanyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCompanyRequest.ProtoReflect.Descriptor instead.
 func (*DeleteCompanyRequest) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{9}
+	return file_company_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *DeleteCompanyRequest) GetId() int64 {
@@ -723,7 +770,7 @@ type UpdateCompanyRequest struct {
 func (x *UpdateCompanyRequest) Reset() {
 	*x = UpdateCompanyRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[10]
+		mi := &file_company_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -736,7 +783,7 @@ func (x *UpdateCompanyRequest) String() string {
 func (*UpdateCompanyRequest) ProtoMessage() {}
 
 func (x *UpdateCompanyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[10]
+	mi := &file_company_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -749,7 +796,7 @@ func (x *UpdateCompanyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCompanyRequest.ProtoReflect.Descriptor instead.
 func (*UpdateCompanyRequest) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{10}
+	return file_company_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *UpdateCompanyRequest) GetId() int64 {
@@ -868,7 +915,7 @@ type CompanyResponse struct {
 func (x *CompanyResponse) Reset() {
 	*x = CompanyResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[11]
+		mi := &file_company_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -881,7 +928,7 @@ func (x *CompanyResponse) String() string {
 func (*CompanyResponse) ProtoMessage() {}
 
 func (x *CompanyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[11]
+	mi := &file_company_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -894,7 +941,7 @@ func (x *CompanyResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CompanyResponse.ProtoReflect.Descriptor instead.
 func (*CompanyResponse) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{11}
+	return file_company_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *CompanyResponse) GetId() int64 {
@@ -1024,7 +1071,7 @@ type CreateCompanyRequest struct {
 func (x *CreateCompanyRequest) Reset() {
 	*x = CreateCompanyRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[12]
+		mi := &file_company_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1037,7 +1084,7 @@ func (x *CreateCompanyRequest) String() string {
 func (*CreateCompanyRequest) ProtoMessage() {}
 
 func (x *CreateCompanyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[12]
+	mi := &file_company_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1050,7 +1097,7 @@ func (x *CreateCompanyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCompanyRequest.ProtoReflect.Descriptor instead.
 func (*CreateCompanyRequest) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{12}
+	return file_company_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *CreateCompanyRequest) GetName() string {
@@ -1144,7 +1191,10 @@ var file_company_proto_rawDesc = []byte{
 	0x1b, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
 	0x2f, 0x65, 0x6d, 0x70, 0x74, 0x79, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1f, 0x67, 0x6f,
 	0x6f, 0x67, 0x6c, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x69,
-	0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xc9, 0x02,
+	0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x2e, 0x0a,
+	0x1a, 0x47, 0x65, 0x74, 0x43, 0x6f, 0x6d, 0x70, 0x61, 0x6e, 0x79, 0x4c, 0x69, 0x73, 0x74, 0x42,
+	0x79, 0x49, 0x64, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x10, 0x0a, 0x03, 0x69,
+	0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x03, 0x52, 0x03, 0x69, 0x64, 0x73, 0x22, 0xc9, 0x02,
 	0x0a, 0x13, 0x55, 0x73, 0x65, 0x72, 0x43, 0x6f, 0x6d, 0x70, 0x61, 0x6e, 0x79, 0x52, 0x65, 0x73,
 	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x17, 0x0a, 0x07, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x69, 0x64,
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x1d,
@@ -1312,7 +1362,7 @@ var file_company_proto_rawDesc = []byte{
 	0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x12, 0x0a, 0x04,
 	0x73, 0x69, 0x7a, 0x65, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x73, 0x69, 0x7a, 0x65,
 	0x12, 0x12, 0x0a, 0x04, 0x6c, 0x6f, 0x67, 0x6f, 0x18, 0x0d, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
-	0x6c, 0x6f, 0x67, 0x6f, 0x32, 0xae, 0x05, 0x0a, 0x07, 0x43, 0x6f, 0x6d, 0x70, 0x61, 0x6e, 0x79,
+	0x6c, 0x6f, 0x67, 0x6f, 0x32, 0xf8, 0x05, 0x0a, 0x07, 0x43, 0x6f, 0x6d, 0x70, 0x61, 0x6e, 0x79,
 	0x12, 0x3e, 0x0a, 0x0e, 0x47, 0x65, 0x74, 0x43, 0x6f, 0x6d, 0x70, 0x61, 0x6e, 0x79, 0x4c, 0x69,
 	0x73, 0x74, 0x12, 0x16, 0x2e, 0x47, 0x65, 0x74, 0x43, 0x6f, 0x6d, 0x70, 0x61, 0x6e, 0x79, 0x4c,
 	0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x14, 0x2e, 0x43, 0x6f, 0x6d,
@@ -1355,8 +1405,13 @@ var file_company_proto_rawDesc = []byte{
 	0x6e, 0x79, 0x12, 0x19, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x43,
 	0x6f, 0x6d, 0x70, 0x61, 0x6e, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e,
 	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x45, 0x6d, 0x70, 0x74, 0x79, 0x42, 0x0a, 0x5a, 0x08, 0x2e, 0x2e, 0x2f, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x45, 0x6d, 0x70, 0x74, 0x79, 0x12, 0x48, 0x0a, 0x13, 0x47, 0x65, 0x74, 0x43, 0x6f, 0x6d, 0x70,
+	0x61, 0x6e, 0x79, 0x4c, 0x69, 0x73, 0x74, 0x42, 0x79, 0x49, 0x64, 0x73, 0x12, 0x1b, 0x2e, 0x47,
+	0x65, 0x74, 0x43, 0x6f, 0x6d, 0x70, 0x61, 0x6e, 0x79, 0x4c, 0x69, 0x73, 0x74, 0x42, 0x79, 0x49,
+	0x64, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x14, 0x2e, 0x43, 0x6f, 0x6d, 0x70,
+	0x61, 0x6e, 0x79, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42,
+	0x0a, 0x5a, 0x08, 0x2e, 0x2e, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1371,61 +1426,64 @@ func file_company_proto_rawDescGZIP() []byte {
 	return file_company_proto_rawDescData
 }
 
-var file_company_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_company_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_company_proto_goTypes = []interface{}{
-	(*UserCompanyResponse)(nil),          // 0: UserCompanyResponse
-	(*GetCompanyUserIdListResponse)(nil), // 1: GetCompanyUserIdListResponse
-	(*SaveUserCompanyRequest)(nil),       // 2: SaveUserCompanyRequest
-	(*DeleteUserCompanyRequest)(nil),     // 3: DeleteUserCompanyRequest
-	(*GetCompanyUserListRequest)(nil),    // 4: GetCompanyUserListRequest
-	(*GetMyCompanyListRequest)(nil),      // 5: GetMyCompanyListRequest
-	(*GetCompanyDetailRequest)(nil),      // 6: GetCompanyDetailRequest
-	(*GetCompanyListRequest)(nil),        // 7: GetCompanyListRequest
-	(*CompanyListResponse)(nil),          // 8: CompanyListResponse
-	(*DeleteCompanyRequest)(nil),         // 9: DeleteCompanyRequest
-	(*UpdateCompanyRequest)(nil),         // 10: UpdateCompanyRequest
-	(*CompanyResponse)(nil),              // 11: CompanyResponse
-	(*CreateCompanyRequest)(nil),         // 12: CreateCompanyRequest
-	nil,                                  // 13: GetCompanyUserListRequest.SortEntry
-	nil,                                  // 14: GetMyCompanyListRequest.SortEntry
-	nil,                                  // 15: GetCompanyListRequest.SearchEntry
-	nil,                                  // 16: GetCompanyListRequest.SortEntry
-	(*timestamppb.Timestamp)(nil),        // 17: google.protobuf.Timestamp
-	(*emptypb.Empty)(nil),                // 18: google.protobuf.Empty
+	(*GetCompanyListByIdsRequest)(nil),   // 0: GetCompanyListByIdsRequest
+	(*UserCompanyResponse)(nil),          // 1: UserCompanyResponse
+	(*GetCompanyUserIdListResponse)(nil), // 2: GetCompanyUserIdListResponse
+	(*SaveUserCompanyRequest)(nil),       // 3: SaveUserCompanyRequest
+	(*DeleteUserCompanyRequest)(nil),     // 4: DeleteUserCompanyRequest
+	(*GetCompanyUserListRequest)(nil),    // 5: GetCompanyUserListRequest
+	(*GetMyCompanyListRequest)(nil),      // 6: GetMyCompanyListRequest
+	(*GetCompanyDetailRequest)(nil),      // 7: GetCompanyDetailRequest
+	(*GetCompanyListRequest)(nil),        // 8: GetCompanyListRequest
+	(*CompanyListResponse)(nil),          // 9: CompanyListResponse
+	(*DeleteCompanyRequest)(nil),         // 10: DeleteCompanyRequest
+	(*UpdateCompanyRequest)(nil),         // 11: UpdateCompanyRequest
+	(*CompanyResponse)(nil),              // 12: CompanyResponse
+	(*CreateCompanyRequest)(nil),         // 13: CreateCompanyRequest
+	nil,                                  // 14: GetCompanyUserListRequest.SortEntry
+	nil,                                  // 15: GetMyCompanyListRequest.SortEntry
+	nil,                                  // 16: GetCompanyListRequest.SearchEntry
+	nil,                                  // 17: GetCompanyListRequest.SortEntry
+	(*timestamppb.Timestamp)(nil),        // 18: google.protobuf.Timestamp
+	(*emptypb.Empty)(nil),                // 19: google.protobuf.Empty
 }
 var file_company_proto_depIdxs = []int32{
-	17, // 0: UserCompanyResponse.created_at:type_name -> google.protobuf.Timestamp
-	17, // 1: UserCompanyResponse.updated_at:type_name -> google.protobuf.Timestamp
-	0,  // 2: GetCompanyUserIdListResponse.data:type_name -> UserCompanyResponse
-	13, // 3: GetCompanyUserListRequest.sort:type_name -> GetCompanyUserListRequest.SortEntry
-	14, // 4: GetMyCompanyListRequest.sort:type_name -> GetMyCompanyListRequest.SortEntry
-	15, // 5: GetCompanyListRequest.search:type_name -> GetCompanyListRequest.SearchEntry
-	16, // 6: GetCompanyListRequest.sort:type_name -> GetCompanyListRequest.SortEntry
-	11, // 7: CompanyListResponse.data:type_name -> CompanyResponse
-	17, // 8: CompanyResponse.created_at:type_name -> google.protobuf.Timestamp
-	17, // 9: CompanyResponse.updated_at:type_name -> google.protobuf.Timestamp
-	7,  // 10: Company.GetCompanyList:input_type -> GetCompanyListRequest
-	6,  // 11: Company.GetCompanyDetail:input_type -> GetCompanyDetailRequest
-	12, // 12: Company.CreateCompany:input_type -> CreateCompanyRequest
-	10, // 13: Company.UpdateCompany:input_type -> UpdateCompanyRequest
-	9,  // 14: Company.DeleteCompany:input_type -> DeleteCompanyRequest
-	5,  // 15: Company.GetMyCompanyList:input_type -> GetMyCompanyListRequest
-	4,  // 16: Company.GetCompanyUserIdList:input_type -> GetCompanyUserListRequest
-	2,  // 17: Company.CreateUserCompany:input_type -> SaveUserCompanyRequest
-	2,  // 18: Company.UpdateUserCompany:input_type -> SaveUserCompanyRequest
-	3,  // 19: Company.DeleteUserCompany:input_type -> DeleteUserCompanyRequest
-	8,  // 20: Company.GetCompanyList:output_type -> CompanyListResponse
-	11, // 21: Company.GetCompanyDetail:output_type -> CompanyResponse
-	11, // 22: Company.CreateCompany:output_type -> CompanyResponse
-	18, // 23: Company.UpdateCompany:output_type -> google.protobuf.Empty
-	18, // 24: Company.DeleteCompany:output_type -> google.protobuf.Empty
-	8,  // 25: Company.GetMyCompanyList:output_type -> CompanyListResponse
-	1,  // 26: Company.GetCompanyUserIdList:output_type -> GetCompanyUserIdListResponse
-	18, // 27: Company.CreateUserCompany:output_type -> google.protobuf.Empty
-	18, // 28: Company.UpdateUserCompany:output_type -> google.protobuf.Empty
-	18, // 29: Company.DeleteUserCompany:output_type -> google.protobuf.Empty
-	20, // [20:30] is the sub-list for method output_type
-	10, // [10:20] is the sub-list for method input_type
+	18, // 0: UserCompanyResponse.created_at:type_name -> google.protobuf.Timestamp
+	18, // 1: UserCompanyResponse.updated_at:type_name -> google.protobuf.Timestamp
+	1,  // 2: GetCompanyUserIdListResponse.data:type_name -> UserCompanyResponse
+	14, // 3: GetCompanyUserListRequest.sort:type_name -> GetCompanyUserListRequest.SortEntry
+	15, // 4: GetMyCompanyListRequest.sort:type_name -> GetMyCompanyListRequest.SortEntry
+	16, // 5: GetCompanyListRequest.search:type_name -> GetCompanyListRequest.SearchEntry
+	17, // 6: GetCompanyListRequest.sort:type_name -> GetCompanyListRequest.SortEntry
+	12, // 7: CompanyListResponse.data:type_name -> CompanyResponse
+	18, // 8: CompanyResponse.created_at:type_name -> google.protobuf.Timestamp
+	18, // 9: CompanyResponse.updated_at:type_name -> google.protobuf.Timestamp
+	8,  // 10: Company.GetCompanyList:input_type -> GetCompanyListRequest
+	7,  // 11: Company.GetCompanyDetail:input_type -> GetCompanyDetailRequest
+	13, // 12: Company.CreateCompany:input_type -> CreateCompanyRequest
+	11, // 13: Company.UpdateCompany:input_type -> UpdateCompanyRequest
+	10, // 14: Company.DeleteCompany:input_type -> DeleteCompanyRequest
+	6,  // 15: Company.GetMyCompanyList:input_type -> GetMyCompanyListRequest
+	5,  // 16: Company.GetCompanyUserIdList:input_type -> GetCompanyUserListRequest
+	3,  // 17: Company.CreateUserCompany:input_type -> SaveUserCompanyRequest
+	3,  // 18: Company.UpdateUserCompany:input_type -> SaveUserCompanyRequest
+	4,  // 19: Company.DeleteUserCompany:input_type -> DeleteUserCompanyRequest
+	0,  // 20: Company.GetCompanyListByIds:input_type -> GetCompanyListByIdsRequest
+	9,  // 21: Company.GetCompanyList:output_type -> CompanyListResponse
+	12, // 22: Company.GetCompanyDetail:output_type -> CompanyResponse
+	12, // 23: Company.CreateCompany:output_type -> CompanyResponse
+	19, // 24: Company.UpdateCompany:output_type -> google.protobuf.Empty
+	19, // 25: Company.DeleteCompany:output_type -> google.protobuf.Empty
+	9,  // 26: Company.GetMyCompanyList:output_type -> CompanyListResponse
+	2,  // 27: Company.GetCompanyUserIdList:output_type -> GetCompanyUserIdListResponse
+	19, // 28: Company.CreateUserCompany:output_type -> google.protobuf.Empty
+	19, // 29: Company.UpdateUserCompany:output_type -> google.protobuf.Empty
+	19, // 30: Company.DeleteUserCompany:output_type -> google.protobuf.Empty
+	9,  // 31: Company.GetCompanyListByIds:output_type -> CompanyListResponse
+	21, // [21:32] is the sub-list for method output_type
+	10, // [10:21] is the sub-list for method input_type
 	10, // [10:10] is the sub-list for extension type_name
 	10, // [10:10] is the sub-list for extension extendee
 	0,  // [0:10] is the sub-list for field type_name
@@ -1438,7 +1496,7 @@ func file_company_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_company_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UserCompanyResponse); i {
+			switch v := v.(*GetCompanyListByIdsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1450,7 +1508,7 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetCompanyUserIdListResponse); i {
+			switch v := v.(*UserCompanyResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1462,7 +1520,7 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SaveUserCompanyRequest); i {
+			switch v := v.(*GetCompanyUserIdListResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1474,7 +1532,7 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteUserCompanyRequest); i {
+			switch v := v.(*SaveUserCompanyRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1486,7 +1544,7 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetCompanyUserListRequest); i {
+			switch v := v.(*DeleteUserCompanyRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1498,7 +1556,7 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetMyCompanyListRequest); i {
+			switch v := v.(*GetCompanyUserListRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1510,7 +1568,7 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetCompanyDetailRequest); i {
+			switch v := v.(*GetMyCompanyListRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1522,7 +1580,7 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetCompanyListRequest); i {
+			switch v := v.(*GetCompanyDetailRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1534,7 +1592,7 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CompanyListResponse); i {
+			switch v := v.(*GetCompanyListRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1546,7 +1604,7 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteCompanyRequest); i {
+			switch v := v.(*CompanyListResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1558,7 +1616,7 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateCompanyRequest); i {
+			switch v := v.(*DeleteCompanyRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1570,7 +1628,7 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CompanyResponse); i {
+			switch v := v.(*UpdateCompanyRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1582,6 +1640,18 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CompanyResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_company_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CreateCompanyRequest); i {
 			case 0:
 				return &v.state
@@ -1600,7 +1670,7 @@ func file_company_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_company_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   17,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

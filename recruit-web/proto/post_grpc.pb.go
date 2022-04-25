@@ -33,6 +33,8 @@ type PostClient interface {
 	DeletePost(ctx context.Context, in *DeletePostRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 获取岗位详情
 	GetPostDetail(ctx context.Context, in *GetPostDetailRequest, opts ...grpc.CallOption) (*PostResponse, error)
+	//根据id获取数据
+	GetPostListByIds(ctx context.Context, in *GetPostListByIdsRequest, opts ...grpc.CallOption) (*PostListResponse, error)
 }
 
 type postClient struct {
@@ -88,6 +90,15 @@ func (c *postClient) GetPostDetail(ctx context.Context, in *GetPostDetailRequest
 	return out, nil
 }
 
+func (c *postClient) GetPostListByIds(ctx context.Context, in *GetPostListByIdsRequest, opts ...grpc.CallOption) (*PostListResponse, error) {
+	out := new(PostListResponse)
+	err := c.cc.Invoke(ctx, "/Post/GetPostListByIds", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PostServer is the server API for Post service.
 // All implementations must embed UnimplementedPostServer
 // for forward compatibility
@@ -102,6 +113,8 @@ type PostServer interface {
 	DeletePost(context.Context, *DeletePostRequest) (*emptypb.Empty, error)
 	// 获取岗位详情
 	GetPostDetail(context.Context, *GetPostDetailRequest) (*PostResponse, error)
+	//根据id获取数据
+	GetPostListByIds(context.Context, *GetPostListByIdsRequest) (*PostListResponse, error)
 	mustEmbedUnimplementedPostServer()
 }
 
@@ -123,6 +136,9 @@ func (UnimplementedPostServer) DeletePost(context.Context, *DeletePostRequest) (
 }
 func (UnimplementedPostServer) GetPostDetail(context.Context, *GetPostDetailRequest) (*PostResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPostDetail not implemented")
+}
+func (UnimplementedPostServer) GetPostListByIds(context.Context, *GetPostListByIdsRequest) (*PostListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPostListByIds not implemented")
 }
 func (UnimplementedPostServer) mustEmbedUnimplementedPostServer() {}
 
@@ -227,6 +243,24 @@ func _Post_GetPostDetail_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Post_GetPostListByIds_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPostListByIdsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PostServer).GetPostListByIds(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Post/GetPostListByIds",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PostServer).GetPostListByIds(ctx, req.(*GetPostListByIdsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Post_ServiceDesc is the grpc.ServiceDesc for Post service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -253,6 +287,10 @@ var Post_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPostDetail",
 			Handler:    _Post_GetPostDetail_Handler,
+		},
+		{
+			MethodName: "GetPostListByIds",
+			Handler:    _Post_GetPostListByIds_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

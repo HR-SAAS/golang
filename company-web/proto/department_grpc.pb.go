@@ -24,7 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DepartmentClient interface {
 	// 获取部门列表
-	GetDepartmentList(ctx context.Context, in *GetDepartmentListRequest, opts ...grpc.CallOption) (*GetDepartmentListResponse, error)
+	GetDepartmentList(ctx context.Context, in *GetDepartmentListRequest, opts ...grpc.CallOption) (*DepartmentListResponse, error)
 	// 获取部门详情
 	GetDepartmentDetail(ctx context.Context, in *GetDepartmentDetailRequest, opts ...grpc.CallOption) (*DepartmentResponse, error)
 	// 创建部门
@@ -34,7 +34,7 @@ type DepartmentClient interface {
 	// 删除部门
 	DeleteDepartment(ctx context.Context, in *DeleteDepartmentRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 只需要判断creator_id是否相同,即可确定主要角色
-	GetMyDepartmentList(ctx context.Context, in *GetMyDepartmentListRequest, opts ...grpc.CallOption) (*GetDepartmentListResponse, error)
+	GetMyDepartmentList(ctx context.Context, in *GetMyDepartmentListRequest, opts ...grpc.CallOption) (*DepartmentListResponse, error)
 	// 全部人员分页
 	GetDepartmentUserIdList(ctx context.Context, in *GetDepartmentUserListRequest, opts ...grpc.CallOption) (*GetDepartmentUserIdListResponse, error)
 	// 加入部门
@@ -43,6 +43,7 @@ type DepartmentClient interface {
 	UpdateUserDepartment(ctx context.Context, in *SaveUserDepartmentRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 人员部门删除(软删除)
 	DeleteUserDepartment(ctx context.Context, in *DeleteUserDepartmentRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetDepartmentListByIds(ctx context.Context, in *GetDepartmentListByIdsRequest, opts ...grpc.CallOption) (*DepartmentListResponse, error)
 }
 
 type departmentClient struct {
@@ -53,8 +54,8 @@ func NewDepartmentClient(cc grpc.ClientConnInterface) DepartmentClient {
 	return &departmentClient{cc}
 }
 
-func (c *departmentClient) GetDepartmentList(ctx context.Context, in *GetDepartmentListRequest, opts ...grpc.CallOption) (*GetDepartmentListResponse, error) {
-	out := new(GetDepartmentListResponse)
+func (c *departmentClient) GetDepartmentList(ctx context.Context, in *GetDepartmentListRequest, opts ...grpc.CallOption) (*DepartmentListResponse, error) {
+	out := new(DepartmentListResponse)
 	err := c.cc.Invoke(ctx, "/Department/GetDepartmentList", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -98,8 +99,8 @@ func (c *departmentClient) DeleteDepartment(ctx context.Context, in *DeleteDepar
 	return out, nil
 }
 
-func (c *departmentClient) GetMyDepartmentList(ctx context.Context, in *GetMyDepartmentListRequest, opts ...grpc.CallOption) (*GetDepartmentListResponse, error) {
-	out := new(GetDepartmentListResponse)
+func (c *departmentClient) GetMyDepartmentList(ctx context.Context, in *GetMyDepartmentListRequest, opts ...grpc.CallOption) (*DepartmentListResponse, error) {
+	out := new(DepartmentListResponse)
 	err := c.cc.Invoke(ctx, "/Department/GetMyDepartmentList", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -143,12 +144,21 @@ func (c *departmentClient) DeleteUserDepartment(ctx context.Context, in *DeleteU
 	return out, nil
 }
 
+func (c *departmentClient) GetDepartmentListByIds(ctx context.Context, in *GetDepartmentListByIdsRequest, opts ...grpc.CallOption) (*DepartmentListResponse, error) {
+	out := new(DepartmentListResponse)
+	err := c.cc.Invoke(ctx, "/Department/GetDepartmentListByIds", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DepartmentServer is the server API for Department service.
 // All implementations must embed UnimplementedDepartmentServer
 // for forward compatibility
 type DepartmentServer interface {
 	// 获取部门列表
-	GetDepartmentList(context.Context, *GetDepartmentListRequest) (*GetDepartmentListResponse, error)
+	GetDepartmentList(context.Context, *GetDepartmentListRequest) (*DepartmentListResponse, error)
 	// 获取部门详情
 	GetDepartmentDetail(context.Context, *GetDepartmentDetailRequest) (*DepartmentResponse, error)
 	// 创建部门
@@ -158,7 +168,7 @@ type DepartmentServer interface {
 	// 删除部门
 	DeleteDepartment(context.Context, *DeleteDepartmentRequest) (*emptypb.Empty, error)
 	// 只需要判断creator_id是否相同,即可确定主要角色
-	GetMyDepartmentList(context.Context, *GetMyDepartmentListRequest) (*GetDepartmentListResponse, error)
+	GetMyDepartmentList(context.Context, *GetMyDepartmentListRequest) (*DepartmentListResponse, error)
 	// 全部人员分页
 	GetDepartmentUserIdList(context.Context, *GetDepartmentUserListRequest) (*GetDepartmentUserIdListResponse, error)
 	// 加入部门
@@ -167,6 +177,7 @@ type DepartmentServer interface {
 	UpdateUserDepartment(context.Context, *SaveUserDepartmentRequest) (*emptypb.Empty, error)
 	// 人员部门删除(软删除)
 	DeleteUserDepartment(context.Context, *DeleteUserDepartmentRequest) (*emptypb.Empty, error)
+	GetDepartmentListByIds(context.Context, *GetDepartmentListByIdsRequest) (*DepartmentListResponse, error)
 	mustEmbedUnimplementedDepartmentServer()
 }
 
@@ -174,7 +185,7 @@ type DepartmentServer interface {
 type UnimplementedDepartmentServer struct {
 }
 
-func (UnimplementedDepartmentServer) GetDepartmentList(context.Context, *GetDepartmentListRequest) (*GetDepartmentListResponse, error) {
+func (UnimplementedDepartmentServer) GetDepartmentList(context.Context, *GetDepartmentListRequest) (*DepartmentListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDepartmentList not implemented")
 }
 func (UnimplementedDepartmentServer) GetDepartmentDetail(context.Context, *GetDepartmentDetailRequest) (*DepartmentResponse, error) {
@@ -189,7 +200,7 @@ func (UnimplementedDepartmentServer) UpdateDepartment(context.Context, *UpdateDe
 func (UnimplementedDepartmentServer) DeleteDepartment(context.Context, *DeleteDepartmentRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteDepartment not implemented")
 }
-func (UnimplementedDepartmentServer) GetMyDepartmentList(context.Context, *GetMyDepartmentListRequest) (*GetDepartmentListResponse, error) {
+func (UnimplementedDepartmentServer) GetMyDepartmentList(context.Context, *GetMyDepartmentListRequest) (*DepartmentListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMyDepartmentList not implemented")
 }
 func (UnimplementedDepartmentServer) GetDepartmentUserIdList(context.Context, *GetDepartmentUserListRequest) (*GetDepartmentUserIdListResponse, error) {
@@ -203,6 +214,9 @@ func (UnimplementedDepartmentServer) UpdateUserDepartment(context.Context, *Save
 }
 func (UnimplementedDepartmentServer) DeleteUserDepartment(context.Context, *DeleteUserDepartmentRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUserDepartment not implemented")
+}
+func (UnimplementedDepartmentServer) GetDepartmentListByIds(context.Context, *GetDepartmentListByIdsRequest) (*DepartmentListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDepartmentListByIds not implemented")
 }
 func (UnimplementedDepartmentServer) mustEmbedUnimplementedDepartmentServer() {}
 
@@ -397,6 +411,24 @@ func _Department_DeleteUserDepartment_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Department_GetDepartmentListByIds_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDepartmentListByIdsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DepartmentServer).GetDepartmentListByIds(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Department/GetDepartmentListByIds",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DepartmentServer).GetDepartmentListByIds(ctx, req.(*GetDepartmentListByIdsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Department_ServiceDesc is the grpc.ServiceDesc for Department service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -443,6 +475,10 @@ var Department_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteUserDepartment",
 			Handler:    _Department_DeleteUserDepartment_Handler,
+		},
+		{
+			MethodName: "GetDepartmentListByIds",
+			Handler:    _Department_GetDepartmentListByIds_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

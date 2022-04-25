@@ -23,6 +23,23 @@ func InitialCon() {
 	//con, err := grpc.Dial(fmt.Sprintf("%s:%d", host, port), grpc.WithInsecure())
 
 	initRecruit()
+	initCompany()
+}
+
+func initCompany() {
+	con, err := grpc.Dial(
+		fmt.Sprintf("consul://%s:%d/%s?wait=14s&tag=python",
+			global.Config.ConsulConfig.Host,
+			global.Config.ConsulConfig.Port,
+			global.Config.CompanySrvInfo.Name),
+		grpc.WithInsecure(),
+		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
+	)
+	if err != nil {
+		panic(err)
+	}
+	global.DepartmentServCon = proto.NewDepartmentClient(con)
+	global.CompanyServCon = proto.NewCompanyClient(con)
 }
 
 func initRecruit() {

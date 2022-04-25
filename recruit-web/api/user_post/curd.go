@@ -3,6 +3,7 @@ package user_post
 import (
 	"context"
 	"github.com/gin-gonic/gin"
+	"hr-saas-go/recruit-web/api/post"
 	"hr-saas-go/recruit-web/global"
 	"hr-saas-go/recruit-web/proto"
 	"hr-saas-go/recruit-web/request"
@@ -12,35 +13,78 @@ import (
 )
 
 // List 投递列表,投递人信息,企业信息,简历信息
-func List(ctx *gin.Context) {
-	search := make(map[string]string)
-	// 根据用户搜索
+func List(field string) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		search := make(map[string]string)
+		if field == "user" {
+			userId := ctx.GetInt64("userId")
+			search["user_id"] = strconv.FormatInt(userId, 10)
+		}
+		if field == "company" {
+			companyId := ctx.Query("company_id")
+			search["company_id"] = companyId
+		}
+		if field == "post" {
+			companyId := ctx.Query("post_id")
+			search["post_id"] = companyId
+		}
+		page, limit := utils.GetPage(ctx)
+		var list, err = global.UserPostServCon.GetUserPostList(ctx, &proto.GetUserPostListRequest{
+			Page:  page,
+			Limit: limit,
+			Sort: map[string]string{
+				"created_at": "asc",
+			},
+			Search: search,
+		})
+		if err != nil {
+			utils.HandleGrpcError(err, ctx)
+			return
+		}
+		res := make([]interface{}, 0, limit)
 
-	// 根据公司搜索
+		// 获取其他信息
+		postIds := make([]int64, 0, limit)
+		for _, v := range list.Data {
+			postIds = append(postIds, v.PostId)
+		}
+		posts, err := global.PostServCon.GetPostListByIds(ctx, &proto.GetPostListByIdsRequest{Ids: postIds})
+		if err != nil {
+			utils.HandleGrpcError(err, ctx)
+			return
+		}
+		dataTemp, err := post.GetListOtherData(ctx, limit, posts)
+		if err != nil {
+			return
+		}
+		data := make(map[int64]interface{})
+		for _, v := range dataTemp {
+			temp := v.(map[string]interface{})
+			data[temp["id"].(int64)] = v
+		}
+		for _, v := range list.Data {
+			res = append(res, map[string]interface{}{
+				"id":          v.Id,
+				"post_id":     v.PostId,
+				"post":        data[v.PostId],
+				"user_id":     v.UserId,
+				"resume_id":   v.ResumeId,
+				"resume_type": v.ResumeType,
+				"resume_name": v.ResumeName,
+				"resume":      v.Resume,
+				"review_id":   v.ReviewId,
+				"status":      v.Status,
+				"company_id":  v.CompanyId,
+				"remark":      v.Remark,
+			})
+		}
 
-	// 根据岗位搜索
-
-	page, limit := utils.GetPage(ctx)
-	var list, err = global.UserPostServCon.GetUserPostList(ctx, &proto.GetUserPostListRequest{
-		Page:  page,
-		Limit: limit,
-		Sort: map[string]string{
-			"created_at": "asc",
-		},
-		Search: search,
-	})
-	if err != nil {
-		utils.HandleGrpcError(err, ctx)
-		return
+		ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
+			"data":  res,
+			"total": list.Total,
+		}))
 	}
 
-	resumes := make([]interface{}, 0, limit)
-	// 获取其他信息
-
-	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
-		"data":  resumes,
-		"total": list.Total,
-	}))
 }
 
 // Show 查看投递详情
@@ -60,7 +104,7 @@ func Show(ctx *gin.Context) {
 		return
 	}
 
-	// TODO 获取其他信息
+	// TODO 获取其他信息 联表?
 
 	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
 		"id": data.Id,

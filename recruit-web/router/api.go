@@ -26,7 +26,14 @@ func InitRouter(group *gin.RouterGroup) {
 	UserPostRouter := group.Group("/recruit/user_post").Use(middleware.JWTAuth())
 	{
 		// 获取投递列表
-		UserPostRouter.GET("/", user_post.List)
+		UserPostRouter.GET("/", user_post.List(""))
+		// 获取我的投递记录
+		UserPostRouter.GET("/me", user_post.List("user"))
+		// 获取岗位的投递记录
+		UserPostRouter.GET("/post", user_post.List("post"))
+		// 获取企业的投递记录
+		UserPostRouter.GET("/company", user_post.List("company"))
+
 		// 获取详情
 		UserPostRouter.GET("/:id", post.Show)
 		// 投递

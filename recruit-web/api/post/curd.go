@@ -2,6 +2,7 @@ package post
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"hr-saas-go/recruit-web/global"
 	"hr-saas-go/recruit-web/proto"
@@ -10,6 +11,61 @@ import (
 	"net/http"
 	"strconv"
 )
+
+func GetListOtherData(ctx *gin.Context, limit int32, list *proto.PostListResponse) ([]interface{}, error) {
+	resumes := make([]interface{}, 0, limit)
+	departmentIds := make([]int64, 0, limit)
+	companyIds := make([]int64, 0, limit)
+	creatorIds := make([]int64, 0, limit)
+	for _, v := range list.Data {
+		departmentIds = append(departmentIds, v.DepartmentId)
+		companyIds = append(companyIds, v.CompanyId)
+		creatorIds = append(creatorIds, v.CreatorId)
+	}
+	// 获取数据
+
+	departments, err := global.DepartmentServCon.GetDepartmentListByIds(ctx, &proto.GetDepartmentListByIdsRequest{Ids: departmentIds})
+	if err != nil {
+		utils.HandleGrpcError(err, ctx)
+		return nil, err
+	}
+
+	departmentMap := make(map[int64]interface{})
+	for _, d := range departments.Data {
+		departmentMap[d.Id] = d
+	}
+
+	companies, err := global.CompanyServCon.GetCompanyListByIds(ctx, &proto.GetCompanyListByIdsRequest{Ids: companyIds})
+	if err != nil {
+		utils.HandleGrpcError(err, ctx)
+		return nil, err
+	}
+	companyMap := make(map[int64]interface{})
+	for _, c := range companies.Data {
+		companyMap[c.Id] = c
+	}
+
+	for _, v := range list.Data {
+		resumes = append(resumes, map[string]interface{}{
+			"id":            v.Id,
+			"name":          v.Name,
+			"type":          v.Type,
+			"content":       v.Content,
+			"experience":    v.Experience,
+			"education":     v.Education,
+			"desc":          v.Desc,
+			"company_id":    v.CompanyId,
+			"company":       companyMap[v.CompanyId],
+			"department_id": v.DepartmentId,
+			"department":    departmentMap[v.DepartmentId],
+			"creator_id":    v.CreatorId,
+			"status":        v.Status,
+			"created_at":    v.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
+			"updated_at":    v.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
+		})
+	}
+	return resumes, nil
+}
 
 func List(ctx *gin.Context) {
 	search := make(map[string]string)
@@ -27,20 +83,12 @@ func List(ctx *gin.Context) {
 		utils.HandleGrpcError(err, ctx)
 		return
 	}
-
-	resumes := make([]interface{}, 0, limit)
-	for _, v := range list.Data {
-		resumes = append(resumes, map[string]interface{}{
-			"id":         v.Id,
-			"name":       v.Name,
-			"type":       v.Type,
-			"content":    v.Content,
-			"created_at": v.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
-			"updated_at": v.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
-		})
+	res, err := GetListOtherData(ctx, limit, list)
+	if err != nil {
+		return
 	}
 	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
-		"data":  resumes,
+		"data":  res,
 		"total": list.Total,
 	}))
 }
@@ -62,18 +110,35 @@ func Show(ctx *gin.Context) {
 	}
 
 	// 获取company
-
+	company, err := global.CompanyServCon.GetCompanyDetail(ctx, &proto.GetCompanyDetailRequest{Id: data.CompanyId})
+	if err != nil {
+		utils.HandleGrpcError(err, ctx)
+		return
+	}
 	// 获取department
-
+	department, err := global.DepartmentServCon.GetDepartmentDetail(ctx, &proto.GetDepartmentDetailRequest{Id: data.DepartmentId})
+	if err != nil {
+		utils.HandleGrpcError(err, ctx)
+		return
+	}
 	// 获取creator_id
 
 	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
-		"id":         data.Id,
-		"name":       data.Name,
-		"type":       data.Type,
-		"content":    data.Content,
-		"created_at": data.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
-		"updated_at": data.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
+		"id":            data.Id,
+		"name":          data.Name,
+		"type":          data.Type,
+		"content":       data.Content,
+		"experience":    data.Experience,
+		"education":     data.Education,
+		"desc":          data.Desc,
+		"company_id":    data.CompanyId,
+		"company":       company,
+		"department_id": data.DepartmentId,
+		"department":    department,
+		"creator_id":    data.CreatorId,
+		"status":        data.Status,
+		"created_at":    data.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
+		"updated_at":    data.CreatedAt.AsTime().Format("2006-01-02 15:01:05"),
 	}))
 	return
 }
@@ -96,6 +161,8 @@ func Create(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, utils.ErrorJson("时间错误"))
 		return
 	}
+	address, _ := json.Marshal(req.Address)
+
 	res, err := global.PostServCon.CreatePost(
 		context.Background(), &proto.CreatePostRequest{
 			CompanyId:    req.CompanyId,
@@ -107,9 +174,10 @@ func Create(ctx *gin.Context) {
 			Content:      req.Content,
 			Experience:   req.Experience,
 			Education:    req.Education,
-			Address:      req.Address,
+			Address:      string(address),
 			StartAt:      startAt,
 			EndAt:        endAt,
+			Status:       req.Status,
 		})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)
@@ -145,6 +213,8 @@ func Update(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, utils.ErrorJson("时间错误"))
 		return
 	}
+	address, _ := json.Marshal(req.Address)
+
 	_, err = global.PostServCon.UpdatePost(ctx, &proto.UpdatePostRequest{
 		Id:           int64(id),
 		CompanyId:    req.CompanyId,
@@ -156,9 +226,10 @@ func Update(ctx *gin.Context) {
 		Content:      req.Content,
 		Experience:   req.Experience,
 		Education:    req.Education,
-		Address:      req.Address,
+		Address:      string(address),
 		StartAt:      startAt,
 		EndAt:        endAt,
+		Status:       req.Status,
 	})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)

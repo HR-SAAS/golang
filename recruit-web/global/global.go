@@ -12,6 +12,8 @@ var (
 	Trans                        ut.Translator
 	RecruitCounterServiceServCon proto.RecruitCounterServiceClient
 	UserPostServCon              proto.UserPostClient
+	CompanyServCon               proto.CompanyClient
+	DepartmentServCon            proto.DepartmentClient
 	PostServCon                  proto.PostClient
 	Debug                        bool
 )
