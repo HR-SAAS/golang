@@ -12,6 +12,7 @@ type UpdateUserRequest struct {
 	Id            int64  `json:"id" form:"id" binding:""`
 	NickName      string `json:"nick_name" form:"nick_name" binding:"required"`
 	Avatar        string `json:"avatar" form:"avatar" binding:""`
+	Name          string `json:"name" form:"name" binding:""`
 	Sex           int32  `json:"sex" form:"sex" binding:"min=0,max=3"`
 	OldPassword   string `json:"old_password" form:"old_password" binding:""`
 	NewPassword   string `json:"new_password" form:"new_password" binding:""`

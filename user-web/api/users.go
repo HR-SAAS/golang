@@ -45,7 +45,29 @@ func Update(ctx *gin.Context) {
 		NickName:    req.NickName,
 		Sex:         req.Sex,
 		Avatar:      req.Avatar,
+		Name:        req.Name,
 		CurrentRole: -1,
+	})
+
+	if err != nil {
+		utils.HandleGrpcError(err, ctx)
+		return
+	}
+	ctx.JSON(http.StatusOK, utils.SuccessJson(nil))
+}
+
+func ChangeRole(ctx *gin.Context) {
+	role, ok := ctx.GetPostForm("current_role")
+	if !ok {
+		ctx.JSON(http.StatusOK, utils.ErrorJson("不能为空"))
+		return
+	}
+	changeRole, _ := strconv.Atoi(role)
+	id := ctx.GetInt64("userId")
+	//req
+	_, err := global.UserServCon.UpdateUser(context.Background(), &proto.UpdateUserRequest{
+		Id:          id,
+		CurrentRole: int32(changeRole),
 	})
 
 	if err != nil {

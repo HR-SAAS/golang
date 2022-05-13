@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"hr-saas-go/recruit-web/global"
 	"hr-saas-go/recruit-web/proto"
 	"hr-saas-go/recruit-web/request"
@@ -72,6 +73,9 @@ func List(ctx *gin.Context) {
 
 	userId := ctx.GetInt64("userId")
 	search["user_id"] = strconv.FormatInt(userId, 10)
+	search["company_id"] = ctx.Query("company_id")
+
+	zap.S().Info("cid", search["company_id"])
 
 	page, limit := utils.GetPage(ctx)
 	list, err := global.PostServCon.GetPostList(ctx, &proto.GetPostListRequest{
@@ -110,17 +114,10 @@ func Show(ctx *gin.Context) {
 	}
 
 	// 获取company
-	company, err := global.CompanyServCon.GetCompanyDetail(ctx, &proto.GetCompanyDetailRequest{Id: data.CompanyId})
-	if err != nil {
-		utils.HandleGrpcError(err, ctx)
-		return
-	}
+	company, _ := global.CompanyServCon.GetCompanyDetail(ctx, &proto.GetCompanyDetailRequest{Id: data.CompanyId})
+
 	// 获取department
-	department, err := global.DepartmentServCon.GetDepartmentDetail(ctx, &proto.GetDepartmentDetailRequest{Id: data.DepartmentId})
-	if err != nil {
-		utils.HandleGrpcError(err, ctx)
-		return
-	}
+	department, _ := global.DepartmentServCon.GetDepartmentDetail(ctx, &proto.GetDepartmentDetailRequest{Id: data.DepartmentId})
 	// 获取creator_id
 
 	ctx.JSON(http.StatusOK, utils.SuccessJson(map[string]interface{}{
