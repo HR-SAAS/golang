@@ -35,11 +35,11 @@ func InitRouter(group *gin.RouterGroup) {
 		UserPostRouter.GET("/company", user_post.List("company"))
 
 		// 获取详情
-		UserPostRouter.GET("/:id", post.Show)
+		UserPostRouter.GET("/:id", user_post.Show)
 		// 投递
-		UserPostRouter.POST("/", post.Create)
+		UserPostRouter.POST("/", user_post.Create)
 		// 修改状态
-		UserPostRouter.PUT("/:id", post.Update)
+		UserPostRouter.PUT("/:id", user_post.Update)
 	}
 }
 

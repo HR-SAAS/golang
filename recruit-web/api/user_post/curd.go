@@ -134,6 +134,11 @@ func Create(ctx *gin.Context) {
 		return
 	}
 	userId := ctx.GetInt64("userId")
+	postDetail, err := global.PostServCon.GetPostDetail(ctx, &proto.GetPostDetailRequest{Id: req.PostId})
+	if err != nil {
+		utils.HandleGrpcError(err, ctx)
+		return
+	}
 	res, err := global.UserPostServCon.CreateUserPost(
 		context.Background(), &proto.CreateUserPostRequest{
 			PostId:     req.PostId,
@@ -142,11 +147,9 @@ func Create(ctx *gin.Context) {
 			ResumeType: req.ResumeType,
 			ResumeName: req.ResumeName,
 			Resume:     req.Resume,
-			ReviewId:   req.ReviewId,
-			Status:     req.Status,
-			CompanyId:  req.CompanyId,
-			Remark:     req.Remark,
+			CompanyId:  postDetail.CompanyId,
 		})
+
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)
 		return
