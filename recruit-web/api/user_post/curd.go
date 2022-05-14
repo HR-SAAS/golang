@@ -139,6 +139,12 @@ func Create(ctx *gin.Context) {
 		utils.HandleGrpcError(err, ctx)
 		return
 	}
+
+	if postDetail.Status != 1 {
+		ctx.JSON(http.StatusOK, utils.ErrorJson("岗位未开放或者已招满"))
+		return
+	}
+
 	res, err := global.UserPostServCon.CreateUserPost(
 		context.Background(), &proto.CreateUserPostRequest{
 			PostId:     req.PostId,
@@ -148,6 +154,7 @@ func Create(ctx *gin.Context) {
 			ResumeName: req.ResumeName,
 			Resume:     req.Resume,
 			CompanyId:  postDetail.CompanyId,
+			Status:     1,
 		})
 
 	if err != nil {
@@ -156,6 +163,28 @@ func Create(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, utils.SuccessJson(res.Id))
 	return
+}
+
+func CheckCanPost(ctx *gin.Context) {
+	// 判断是否能够提交简历
+	search := make(map[string]string)
+	companyId, _ := strconv.Atoi(ctx.Query("company_id"))
+	postId, _ := strconv.Atoi(ctx.Query("post_id"))
+
+	search["user_id"] = strconv.FormatInt(ctx.GetInt64("userId"), 10)
+
+	res, err := global.RecruitCounterServiceServCon.CountUserPost(ctx, &proto.CountUserPostRequest{
+		CompanyId: int64(companyId),
+		PostId:    int64(postId),
+		Search:    nil,
+	})
+
+	if err != nil {
+		utils.HandleGrpcError(err, ctx)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, utils.SuccessJson(res.Count))
 }
 
 // Update 更新状态
@@ -175,11 +204,14 @@ func Update(ctx *gin.Context) {
 		return
 	}
 	_, err = global.UserPostServCon.UpdateUserPost(ctx, &proto.UpdateUserPostRequest{
+		Id:        int64(id),
 		ReviewId:  userId,
 		Status:    req.Status,
-		CompanyId: req.CompanyId,
 		Remark:    req.Remark,
-		// 添加审核ID
+		CompanyId: -1,
+		PostId:    -1,
+		ResumeId:  -1,
+		UserId:    -1,
 	})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)

@@ -34,6 +34,8 @@ func InitRouter(group *gin.RouterGroup) {
 		// 获取企业的投递记录
 		UserPostRouter.GET("/company", user_post.List("company"))
 
+		// 检测
+		UserPostRouter.GET("/check", user_post.CheckCanPost)
 		// 获取详情
 		UserPostRouter.GET("/:id", user_post.Show)
 		// 投递
