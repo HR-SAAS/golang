@@ -15,14 +15,28 @@ import (
 // List 投递列表,投递人信息,企业信息,简历信息
 func List(field string) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
+		var sort map[string]string
 		search := make(map[string]string)
 		if field == "user" {
 			userId := ctx.GetInt64("userId")
 			search["user_id"] = strconv.FormatInt(userId, 10)
+			sort = map[string]string{
+				"updated_at": "desc",
+				"status":     "desc",
+			}
 		}
 		if field == "company" {
 			companyId := ctx.Query("company_id")
 			search["company_id"] = companyId
+			if status := ctx.Query("status"); status != "" {
+				search["status"] = status
+			} else {
+				search["status"] = "1"
+			}
+			sort = map[string]string{
+				"created_at": "asc",
+				"status":     "desc",
+			}
 		}
 		if field == "post" {
 			companyId := ctx.Query("post_id")
@@ -30,11 +44,9 @@ func List(field string) func(ctx *gin.Context) {
 		}
 		page, limit := utils.GetPage(ctx)
 		var list, err = global.UserPostServCon.GetUserPostList(ctx, &proto.GetUserPostListRequest{
-			Page:  page,
-			Limit: limit,
-			Sort: map[string]string{
-				"created_at": "asc",
-			},
+			Page:   page,
+			Limit:  limit,
+			Sort:   sort,
 			Search: search,
 		})
 		if err != nil {

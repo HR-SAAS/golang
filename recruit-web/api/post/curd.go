@@ -72,6 +72,7 @@ func List(ctx *gin.Context) {
 	search := make(map[string]string)
 
 	userId := ctx.GetInt64("userId")
+	search["name"] = ctx.Query("name")
 	search["user_id"] = strconv.FormatInt(userId, 10)
 	search["company_id"] = ctx.Query("company_id")
 
@@ -82,6 +83,9 @@ func List(ctx *gin.Context) {
 		Page:   page,
 		Limit:  limit,
 		Search: search,
+		Sort: map[string]string{
+			"updated_at": "desc",
+		},
 	})
 	if err != nil {
 		utils.HandleGrpcError(err, ctx)
